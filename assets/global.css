@@ -1,0 +1,25 @@
+:root{
+  --theme: #425aef;
+  --white: #fff;
+  --card-bg: #fff;
+  --card-border: #e3e8f7;
+  --font-color: #4c4948;
+  --bg-color: #f5f9ff;
+  --max-width: 1400px;
+  --xl-radius: 12px;
+  --md-radius: 10px;
+  --normal-radius: 8px;
+  --3xl-size: 2rem;
+  --2xl-size: 1.75rem;
+  --xl-size: 1.5rem;
+  --md-size: 1.25rem;
+  --noraml-size: 1rem;
+  --sm-size: 0.75rem;
+  --xs-size: 0.5rem;
+  --maskbg: rgba(255, 255, 255, 0.6);
+  --maskbgdeep: rgba(255, 255, 255, 0.85);
+}
+
+.pointer{
+  cursor: pointer;
+}
