@@ -5,12 +5,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        {
-          rel: "stylesheet",
-          href: "https://at.alicdn.com/t/c/font_3605429_w4g74dtesvh.css",
-        },
-      ],
-    },
+        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_2zog09zvz5g.css' }
+      ]
+    }
   },
-  css: ["normalize.css/normalize.css", "@/assets/global.css"],
-});
+  css: ['normalize.css/normalize.css', '@/assets/global.css'],
+})
