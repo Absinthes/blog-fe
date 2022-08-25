@@ -1,9 +1,11 @@
 <template>
   <nav class="nav-contanier" :class="{ 'bg-show': prevScrollTop > 0 }">
     <div class="nav-group">
-      <div class="back-home pointer">
-        <i class="iconfont icon-shouyetianchong"></i>
-      </div>
+      <NuxtLink to="/">
+        <div class="back-home pointer">
+          <i class="iconfont icon-shouyetianchong"></i>
+        </div>
+      </NuxtLink>
       <div class="menu-box" :class="{ hide: direction === 'bottom' }">
         <span
           v-for="it in navMenu"
@@ -30,9 +32,9 @@
       </div>
     </div>
     <div class="now-title">
-      <span :class="{ show: direction === 'bottom' }" @click="backTop"
-        >{{route.meta.title}}</span
-      >
+      <span :class="{ show: direction === 'bottom' }" @click="backTop">{{
+        route.meta.title
+      }}</span>
     </div>
   </nav>
 </template>
@@ -45,7 +47,7 @@ type MenuItem = {
   icon?: string;
   children?: MenuItem[];
 };
-const route = useRoute()
+const route = useRoute();
 const router = useRouter();
 const navMenu: MenuItem[] = [
   {
@@ -64,7 +66,7 @@ const navMenu: MenuItem[] = [
       },
       {
         title: "全部标签",
-        url: "",
+        url: "/tags",
         icon: "",
       },
       {
@@ -88,10 +90,6 @@ const navMenu: MenuItem[] = [
   },
 ];
 const direction = ref<"top" | "bottom">("top");
-console.log(route)
-const handlerClick = (item: MenuItem) => {
-  router.push(item.url);
-};
 
 let prevScrollTop = ref(0);
 const handlerScroll = (e: Event) => {
@@ -115,6 +113,10 @@ const backTop = () => {
     behavior: "smooth",
   });
 };
+
+const handlerClick = (it: MenuItem) => {
+  router.push(it.url)
+}
 </script>
 
 <style scoped lang="scss">
@@ -123,10 +125,16 @@ const backTop = () => {
   top: 0;
   left: 0;
   right: 0;
+  margin: 0 auto;
+  border-bottom: 1px solid transparent;
   color: var(--font-color);
   backdrop-filter: saturate(180%) blur(20px);
-  border: 1px solid transparent;
   transition: background 0.3s ease-in-out;
+  z-index: 99;
+  a {
+    text-decoration: none;
+    color: currentColor;
+  }
   // overflow: hidden;
   &.bg-show {
     background-color: var(--maskbgdeep);
@@ -139,6 +147,8 @@ const backTop = () => {
     margin: 0 auto;
     height: 60px;
     max-width: var(--max-width, 1400px);
+    padding: 0 30px;
+    box-sizing: border-box;
   }
 }
 
@@ -199,6 +209,7 @@ const backTop = () => {
       box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
       transition: border 0.3s ease-in-out;
       animation: menuShow 0.3s;
+      z-index: 99;
       li {
         display: inline-flex;
         padding: 10px 15px;
@@ -237,6 +248,7 @@ const backTop = () => {
   position: absolute;
   top: 0;
   left: 50%;
+  height: 100%;
   transform: translateX(-50%);
   overflow: hidden;
   span {

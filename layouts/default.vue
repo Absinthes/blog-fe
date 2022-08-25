@@ -25,6 +25,11 @@
 .container {
   max-width: var(--max-width);
   margin: 60px auto 0;
-  padding: 10px 0;
+  padding: 10px 30px;
+  box-sizing: border-box;
+}
+
+.aside-content{
+  width: 20%;
 }
 </style>

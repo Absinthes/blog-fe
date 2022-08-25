@@ -3,6 +3,7 @@
   --white: #fff;
   --card-bg: #fff;
   --card-border: #e3e8f7;
+  --card-padding: 1rem 2rem;
   --font-color: #4c4948;
   --bg-color: #f5f9ff;
   --max-width: 1400px;
@@ -13,11 +14,12 @@
   --2xl-size: 1.75rem;
   --xl-size: 1.5rem;
   --md-size: 1.25rem;
-  --noraml-size: 1rem;
+  --normal-size: 1rem;
   --sm-size: 0.75rem;
   --xs-size: 0.5rem;
   --maskbg: rgba(255, 255, 255, 0.6);
   --maskbgdeep: rgba(255, 255, 255, 0.85);
+  --secondbg: #f1f3f8
 }
 
 .pointer{

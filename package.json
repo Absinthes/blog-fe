@@ -1,16 +1,24 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --port 4000",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
   },
   "devDependencies": {
+    "graphql": "^16.6.0",
     "nuxt": "3.0.0-rc.8",
+    "nuxt-graphql-request": "^5.2.0",
     "sass": "^1.54.5"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.9",
+    "@vue/apollo-composable": "^4.0.0-alpha.19",
+    "@vue/apollo-option": "^4.0.0-alpha.20",
+    "apollo-upload-client": "^17.0.0",
+    "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1"
   }
