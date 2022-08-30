@@ -43,6 +43,7 @@
     aside {
       width: 20%;
       box-sizing: border-box;
+      padding: 0 0.8rem;
     }
   }
 }

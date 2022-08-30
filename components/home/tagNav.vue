@@ -26,10 +26,35 @@
           <div class="number">76<span>篇</span></div>
         </div>
       </div>
-      <div class="bottom">
-        
-      </div>
       <hr>
+      <div class="bottom">
+        <div class="column article">
+          <span>
+            <i class="iconfont icon-icon_article"/>
+            文章总数 :
+          </span>
+          <span class="data">
+            636
+          </span>
+        </div>
+        <div class="column day">
+          <span>
+            <i class="iconfont icon-shijian"/>
+            建站天数 :
+          </span>
+          <span class="data">
+            1037天
+          </span>
+        </div>
+        <div class="column bytes">
+          <span>
+            <i class="iconfont icon-ziti"/>  
+            全站字数 :
+          </span>
+          <span class="data">598.2k</span>
+        </div>
+      </div>
+      
     </card>
   </div>
 
@@ -69,7 +94,6 @@ import { Tag } from '~~/types';
   .tag-nav{
     position: sticky;
     top: 70px;
-    // width: 20%;
     .tag-nav-wrapper{
       padding: 1rem;
       .top{
@@ -133,6 +157,23 @@ import { Tag } from '~~/types';
             color: #FFF;
             .year{
               color: rgba($color: #fff, $alpha: .4);
+            }
+          }
+        }
+      }
+
+      .bottom{
+        .column{
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          color: rgb(76, 73, 72);
+          margin: 1rem 0;
+          span{
+            display: block;
+            width: 45%;
+            &.data{
+              text-align: right;
             }
           }
         }
