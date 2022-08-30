@@ -130,3 +130,45 @@ export async function deleteArticle(id: string) {
     return res?.deleteArticle;
   } catch (error) {}
 }
+
+export async function getArticleByTagId(
+  id: string,
+  limit: number = 10,
+  offset: number = 0
+) {
+  let res = await query<{ getArticleByTagId: Pagination<Article> }>(
+    gql`
+      query GetArticleByTagId($id: String!, $pagination: PaginationQuerInput) {
+        getArticleByTagId(id: $id, pagination: $pagination) {
+          totalCount
+          nodes {
+            id
+            title
+            viewNum
+            pic
+            summary
+            likes
+            weight
+            isPublic
+            createTime
+            tags {
+              id
+              name
+            }
+          }
+        }
+      }
+    `,
+    {
+      id,
+      pagination: {
+        limit,
+        offset,
+      },
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getArticleByTagId;
+}
