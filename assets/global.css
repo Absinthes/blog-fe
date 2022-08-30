@@ -5,6 +5,7 @@
   --card-border: #e3e8f7;
   --card-padding: 1rem 2rem;
   --font-color: #4c4948;
+  --border-color:#e3e8f7;
   --bg-color: #f5f9ff;
   --max-width: 1400px;
   --xl-radius: 12px;
@@ -19,7 +20,8 @@
   --xs-size: 0.5rem;
   --maskbg: rgba(255, 255, 255, 0.6);
   --maskbgdeep: rgba(255, 255, 255, 0.85);
-  --secondbg: #f1f3f8
+  --secondbg: #f1f3f8;
+  --top-nav-height:60px;
 }
 
 .pointer{

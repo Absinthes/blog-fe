@@ -1,6 +1,10 @@
 <template>
   <NuxtLayout name="list-layout">
-    <template #aside> </template>
+    <template #aside>
+      <div class="aside">
+        <TagNav/>
+      </div>
+    </template>
     <template #default>
       <div class="default">
         <div class="contetn-bar">
@@ -18,9 +22,51 @@
           <div class="post-item">
             <post-item> </post-item>
           </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
+          <div class="post-item">
+            <post-item> </post-item>
+          </div>
         </div>
         <nav id="pagination">
-          <Pagination/>
+          <Pagination />
         </nav>
       </div>
     </template>
@@ -30,6 +76,7 @@
 <script setup lang="ts">
 import { RouteLocationRaw } from "vue-router";
 import ContentBar from "~~/components/contentBar.vue";
+import TagNav from "~~/components/home/tagNav.vue";
 const contentNavData = ref<
   {
     name: string;
@@ -102,6 +149,7 @@ const handleMoreClick = () => {
 
 <style scoped lang="scss">
 .default {
+  padding-right: 0.5rem;
   .content-bar {
     width: 100%;
     display: flex;
@@ -120,5 +168,11 @@ const handleMoreClick = () => {
       margin-bottom: 0.5rem;
     }
   }
+}
+
+.aside {
+  width: 100%;
+  height: 100%;
+  padding-left: 0.5rem;
 }
 </style>
