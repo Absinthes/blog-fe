@@ -18,7 +18,7 @@ const tagList = ref<Tag[]>([]);
 const router = useRouter()
 
 const getData = async () => {
-  const { data: res } = await useAsyncData(() => getAllTag(1));
+  const { data: res } = await useAsyncData(async () => await getAllTag(1));
   console.log(res.value);
   tagList.value = res.value;
 };
@@ -64,11 +64,11 @@ const handlerClick = (it: Tag) => {
       display: inline-block;
       margin-left: 7px;
       background-color: var(--white);
-      min-width: 25px;
+      min-width: 20px;
       padding: 4px;
       text-align: center;
       font-size: 1rem;
-      border-radius: var(--md-radius);
+      border-radius: var(--normal-radius);
     }
   }
 }

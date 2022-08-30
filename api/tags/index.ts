@@ -32,14 +32,23 @@ export async function getAllTag(type: TagType) {
 export async function getTagList(
   limit: number = 10,
   offset: number = 0,
-  type?: TagType | null
+  type?: TagType | null,
+  tagName?: string
 ) {
   const res = await query<{
     getTagsList: Pagination<Tag>;
   }>(
     gql`
-      query GetTagsList($paginationQuery: PaginationQuerInput!, $type: Int) {
-        getTagsList(paginationQuery: $paginationQuery, type: $type) {
+      query GetTagsList(
+        $paginationQuery: PaginationQuerInput!
+        $type: Int
+        $tagName: String
+      ) {
+        getTagsList(
+          paginationQuery: $paginationQuery
+          type: $type
+          name: $tagName
+        ) {
           totalCount
           nodes {
             id
@@ -58,6 +67,7 @@ export async function getTagList(
         offset,
       },
       type,
+      tagName,
     },
     {
       fetchPolicy: "network-only",
