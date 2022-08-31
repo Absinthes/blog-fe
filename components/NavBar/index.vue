@@ -99,8 +99,7 @@ const handlerScroll = (e: Event) => {
   } else {
     direction.value = "top";
   }
-  prevScrollTop.value = scrollTop;
-  console.log(direction.value, prevScrollTop.value);
+  prevScrollTop.value = scrollTop;  
 };
 const throttleHandleScroll = _.throttle(handlerScroll, 300);
 onMounted(() => {

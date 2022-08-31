@@ -11,32 +11,39 @@
       <div class="content">
         <slot></slot>
       </div>
-      <div class="aside">
+      <aside>
         <slot name="aside"></slot>
-      </div>
+      </aside>
     </main>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+</script>
 
 <style scoped lang="scss">
 #list-layout {
+  header{
+    height: var(--top-nav-height);
+  }
   main {
-    margin-top: 60px;
+    position: relative;
     max-width: var(--max-width);
     width: var(--max-width);
     padding: 10px 30px;
     box-sizing: border-box;
-    margin: 60px auto 0;
+    margin: 0 auto 0;
     display: flex;
     .content {
       width: 80%;
       box-sizing: border-box;
+      padding-right: 0.5rem;
     }
-    .aside {
+    aside {
       width: 20%;
       box-sizing: border-box;
+      padding: 0 0.8rem;
     }
   }
 }

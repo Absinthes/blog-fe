@@ -35,7 +35,7 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    src: string;
+    src?: string;
   }>(),
   {
     src: "/public/微信图片_20220824211856.jpg",

@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_2zog09zvz5g.css' }
+        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_624n3vy177q.css' }
       ]
     }
   },
