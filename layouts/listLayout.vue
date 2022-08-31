@@ -29,12 +29,13 @@
   }
   main {
     position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 30px;
+    margin: 0 auto 0;
     max-width: var(--max-width);
     width: var(--max-width);
-    padding: 10px 30px;
     box-sizing: border-box;
-    margin: 0 auto 0;
-    display: flex;
     .content {
       width: 80%;
       box-sizing: border-box;

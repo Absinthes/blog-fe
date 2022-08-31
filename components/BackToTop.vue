@@ -26,7 +26,6 @@ const isHide = computed(() => {
 let totalH ;
 // 可视高
 let clientH ;
-console.log(totalH, clientH);
 
 const handleTop = () => {
   window.scrollTo({

@@ -1,96 +1,94 @@
 <template>
   <NuxtLayout>
-    <Card>
-      <div class="tag">
-        <aside class="tags-box">
-          <div
-            class="tags-item"
-            v-for="it in tagList"
-            @click="tagClick(it)"
-            :class="{ active: currentTag.name == it.name }"
-          >
-            <span class="label">#</span>
-            <span class="title">{{ it.name }}</span>
-            <span class="num">{{ it.articles.length }}</span>
-          </div>
-        </aside>
-        <article class="content">
-          <h1 class="tag-name">{{ currentTag.name }}</h1>
-          <div class="article-box">
-            <div v-for="(it, key) in articleList" class="article-group-box">
-              <p class="time">{{ key }}</p>
-              <div class="article-box">
-                <div v-for="ele in it" class="article-item">
-                  <img
-                    :src="IMG_ADDRESS + ele.pic"
-                    :alt="IMG_ADDRESS + ele.pic"
-                  />
-                  <div class="info">
-                    <p class="article-title">{{ ele.title }}</p>
-                    <div v-for="tag in ele.tags" class="tags">
-                      <span class="tag">
-                        <span class="sign">#</span>
-                        <span>{{ tag.name }}</span>
-                      </span>
+    <div class="container">
+      <Card style="margin-right: 1rem">
+        <div class="tag">
+          <aside class="tags-box">
+            <div
+              class="tags-item"
+              v-for="it in tagList"
+              @click="tagClick(it)"
+              :class="{ active: currentTag.name == it.name }"
+            >
+              <span class="label">#</span>
+              <span class="title">{{ it.name }}</span>
+              <span class="num">{{ it.articles.length }}</span>
+            </div>
+          </aside>
+          <!-- <article class="content">
+            <h1 class="tag-name">{{ currentTag.name }}</h1>
+            <div class="article-box">
+              <div v-for="(it, key) in articleList" class="article-group-box">
+                <p class="time">{{ key }}</p>
+                <div class="article-box">
+                  <div v-for="ele in it" class="article-item">
+                    <img
+                      :src="IMG_ADDRESS + ele.pic"
+                      :alt="IMG_ADDRESS + ele.pic"
+                    />
+                    <div class="info">
+                      <p class="article-title">{{ ele.title }}</p>
+                      <div v-for="tag in ele.tags" class="tags">
+                        <span class="tag">
+                          <span class="sign">#</span>
+                          <span>{{ tag.name }}</span>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </article>
+          </article> -->
+          <ArticleList
+            :title="currentTag.name"
+            :articleList="articleList"
+            :imgAddress="IMG_ADDRESS"
+          />
+          <nav class="pagination">
+            <Pagination v-bind="queryParams" />
+          </nav>
+        </div>
+      </Card>
+      <div class="aside-box">
+        <TagNav />
       </div>
-    </Card>
+    </div>
   </NuxtLayout>
 </template>
 
 <script lang="ts" setup>
 import { getAllTag, getArticleByTagId } from "~~/api";
-import { Article, Tag } from "~~/types";
+import { Tag } from "~~/types";
+import TagNav from "~~/components/home/tagNav.vue";
 
 definePageMeta({
-  keepalive: false
-})
-
-type ArticleListByTimeType = {
-  [T in string]: Article[];
-};
-console.log(1111);
+  keepalive: false,
+});
 
 const route = useRoute();
 const router = useRouter();
 const queryParams = reactive({
-  limit: 10,
+  pageSize: 10,
   currentPage: 1,
+  pageNumber: 0,
   total: 0,
 });
 
-const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS as string;
 
 const { data: tagList } = await useAsyncData(() => getAllTag(1));
 const currentTag = ref<Tag>(
   tagList.value.find((it) => it?.name === route.params.name)
 );
 
-const filterArticle = (list: Article[]) => {
-  let res: ArticleListByTimeType = {};
-  list.forEach((it) => {
-    const year = new Date(+it.createTime).getFullYear();
-    if (year in res) {
-      res[year].push(it);
-    } else {
-      res[year] = [it];
-    }
-  });
-  return res;
-};
-
 const { data: articleList, refresh: articleRefresh } = await useAsyncData(
   "article",
   async () => {
     let { nodes, totalCount } = await getArticleByTagId(currentTag.value.id);
     queryParams.total = totalCount;
-    return filterArticle(nodes);
+    queryParams.pageNumber = Math.ceil(totalCount / queryParams.pageSize);
+    return nodes;
   }
 );
 
@@ -102,6 +100,9 @@ const tagClick = async (tag: Tag) => {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  display: flex;
+}
 .tag {
   padding: 1.5rem 1.5rem;
   color: var(--font-color);
@@ -156,49 +157,58 @@ const tagClick = async (tag: Tag) => {
   }
 }
 
-.content{
-  .article-box{
-    .article-group-box{
+.content {
+  .article-box {
+    .article-group-box {
       margin: 5px 0;
-      .time{
+      .time {
         color: #c3c3c3;
       }
-      .article-item{
+      .article-item {
         display: flex;
-        img{
+        img {
           width: 150px;
           height: 90px;
           object-fit: cover;
           border-radius: var(--xl-radius);
         }
-        .info{
+        .info {
           display: flex;
           flex-direction: column;
           justify-content: center;
           margin-left: 1rem;
         }
-        .article-title{
+        .article-title {
           margin: 0;
           font-weight: 700;
           line-height: 2.5rem;
           font-size: 1.2rem;
         }
-        .tags{
+        .tags {
           display: flex;
           font-size: 0.9rem;
           line-height: 2.5rem;
           color: #242424;
         }
-        .tag{
+        .tag {
           margin-right: 10px;
           padding: 0;
         }
-        .sign{
+        .sign {
           margin-right: 3px;
         }
       }
     }
-
   }
+}
+
+.aside-box {
+  position: sticky;
+  top: 0;
+  width: 300px;
+}
+
+.pagination {
+  margin-top: 1rem;
 }
 </style>

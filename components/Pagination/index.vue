@@ -1,9 +1,12 @@
 <template>
   <div class="pagination">
-    <div
-      class="prev"
-    >
-      <card v-show="curPage > 1" class="card" hover-border-color="var(--theme)" @click="handleClick(curPage - 1)">
+    <div class="prev">
+      <card
+        v-show="curPage > 1"
+        class="card"
+        hover-border-color="var(--theme)"
+        @click="handleClick(curPage - 1)"
+      >
         <div>
           <i class="iconfont icon-xiangzuo"></i>
           <span>上页</span>
@@ -35,8 +38,13 @@
         >
       </div>
     </div>
-    <div class="next" >
-      <card v-show="curPage < maxPage" class="card" @click="handleClick(curPage + 1)" hover-border-color="var(--theme)">
+    <div class="next">
+      <card
+        v-show="curPage < maxPage"
+        class="card"
+        @click="handleClick(curPage + 1)"
+        hover-border-color="var(--theme)"
+      >
         <div>
           <span>下页</span>
           <i class="iconfont icon-xiangyou"></i>
@@ -86,8 +94,8 @@ const handleClick = (index: number) => {
   emit("pageChange", index);
 };
 watchEffect(() => {
-  console.log(curPage.value)
-})
+  console.log(curPage.value);
+});
 </script>
 
 <style scoped lang="scss">
