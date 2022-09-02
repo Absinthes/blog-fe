@@ -93,9 +93,6 @@ const handleClick = (index: number) => {
   curPage.value = index;
   emit("pageChange", index);
 };
-watchEffect(() => {
-  console.log(curPage.value);
-});
 </script>
 
 <style scoped lang="scss">
@@ -158,13 +155,13 @@ watchEffect(() => {
   .page-numbers {
     display: flex;
     height: 2rem;
-    line-height: 2rem;
     text-align: center;
 
     .page-number {
       cursor: pointer;
       margin: 0 0.8rem;
       .card {
+        display: flex;
         justify-content: center;
         align-items: center;
         padding: 0.2rem 0.5rem;

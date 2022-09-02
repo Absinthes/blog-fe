@@ -15,35 +15,12 @@
               <span class="num">{{ it.articles.length }}</span>
             </div>
           </aside>
-          <!-- <article class="content">
-            <h1 class="tag-name">{{ currentTag.name }}</h1>
-            <div class="article-box">
-              <div v-for="(it, key) in articleList" class="article-group-box">
-                <p class="time">{{ key }}</p>
-                <div class="article-box">
-                  <div v-for="ele in it" class="article-item">
-                    <img
-                      :src="IMG_ADDRESS + ele.pic"
-                      :alt="IMG_ADDRESS + ele.pic"
-                    />
-                    <div class="info">
-                      <p class="article-title">{{ ele.title }}</p>
-                      <div v-for="tag in ele.tags" class="tags">
-                        <span class="tag">
-                          <span class="sign">#</span>
-                          <span>{{ tag.name }}</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article> -->
           <ArticleList
+            v-if="articleList"
             :title="currentTag.name"
             :articleList="articleList"
             :imgAddress="IMG_ADDRESS"
+            @tagClick="tagClick"
           />
           <nav class="pagination">
             <Pagination v-bind="queryParams" />
@@ -85,10 +62,18 @@ const currentTag = ref<Tag>(
 const { data: articleList, refresh: articleRefresh } = await useAsyncData(
   "article",
   async () => {
-    let { nodes, totalCount } = await getArticleByTagId(currentTag.value.id);
+    const { pageSize: limit, currentPage } = queryParams;
+    let { nodes, totalCount } = await getArticleByTagId(
+      currentTag.value.id,
+      limit,
+      limit * (currentPage - 1)
+    );
     queryParams.total = totalCount;
     queryParams.pageNumber = Math.ceil(totalCount / queryParams.pageSize);
     return nodes;
+  },
+  {
+    lazy: true,
   }
 );
 
@@ -109,12 +94,15 @@ const tagClick = async (tag: Tag) => {
 }
 .tags-box {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   color: var(--font-color);
   .tags-item {
     padding: 5px 10px;
     border: 1px solid var(--card-border);
     border-radius: var(--normal-radius);
-    margin-right: 7px;
+    margin-right: 15px;
+    margin-bottom: 10px;
     cursor: pointer;
     transition: border-color 0.3s, background-color 0.3s, color 0.3s,
       transform 0.3s;

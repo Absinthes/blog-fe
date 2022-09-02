@@ -14,6 +14,7 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
             id
             title
             viewNum
+            pic
             summary
             content
             contentNum

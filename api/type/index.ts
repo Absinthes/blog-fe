@@ -2,8 +2,8 @@ import { Pagination, StatusModel, Type } from "@/types";
 import gql from "graphql-tag";
 import { query, mutation } from "../request";
 
-export const getType = async (offset: number = 1, limit: number = 10) => {
-  return await query<{
+export const getType = async (offset?: number, limit?: number) => {
+  let res =  await query<{
     getTypeByRoot: Pagination<Type>;
   }>(
     gql`
@@ -60,13 +60,14 @@ export const getType = async (offset: number = 1, limit: number = 10) => {
     {
       getTypeByRootInput2: {
         limit,
-        offset: offset,
+        offset,
       },
     },
     {
       fetchPolicy: "cache-and-network",
     }
   );
+  return res.getTypeByRoot
 };
 
 export const deleteType = async (id: string) => {

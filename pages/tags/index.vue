@@ -40,7 +40,7 @@ getData();
     align-items: center;
     font-size: 1.4rem;
     padding: 10px;
-    margin: 0 10px;
+    margin: 0 10px 20px;
     background-color: var(--secondbg);
     border-radius: var(--md-radius);
     border: 1px solid var(--card-border);

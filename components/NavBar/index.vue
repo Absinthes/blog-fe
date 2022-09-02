@@ -56,12 +56,12 @@ const navMenu: MenuItem[] = [
     children: [
       {
         title: "文章列表",
-        url: "",
+        url: "/archives",
         icon: "",
       },
       {
         title: "全部分类",
-        url: "",
+        url: "/classify/All",
         icon: "",
       },
       {

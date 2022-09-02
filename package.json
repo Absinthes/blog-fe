@@ -19,8 +19,10 @@
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "@vue/apollo-option": "^4.0.0-alpha.20",
     "apollo-upload-client": "^17.0.0",
+    "dayjs": "^1.11.5",
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "swiper": "^8.3.2"
   }
 }
