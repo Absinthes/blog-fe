@@ -8,8 +8,8 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "@types/lodash": "^4.14.184",
+    "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
     "nuxt": "3.0.0-rc.8",
     "sass": "^1.54.5"
@@ -19,6 +19,7 @@
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "@vue/apollo-option": "^4.0.0-alpha.20",
     "apollo-upload-client": "^17.0.0",
+    "dayjs": "^1.11.5",
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1"

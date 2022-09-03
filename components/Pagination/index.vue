@@ -78,11 +78,13 @@ const maxPage = computed(() => {
 });
 const half = Math.floor(props.pageNumber / 2);
 const start = computed(() => {
+  let res ;
   if (curPage.value == maxPage.value) {
-    return curPage.value - props.pageNumber + 1;
+    res =  curPage.value - props.pageNumber + 1 ;
   } else {
-    return curPage.value - half > 1 ? curPage.value - half : 1;
+    res =  curPage.value - half 
   }
+  return res > 1 ? res : 1;
 });
 const end = computed(() => {
   let res = props.pageNumber + start.value - 1;

@@ -2,7 +2,7 @@
   <NuxtLayout name="list-layout">
     <template #aside>
       <div class="aside">
-        <TagNav/>
+        <TagNav />
       </div>
     </template>
     <template #default>
@@ -16,57 +16,15 @@
           </card>
         </div>
         <div class="post-items">
-          <div class="post-item new">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
-          </div>
-          <div class="post-item">
-            <post-item> </post-item>
+          <!-- <div class="post-item new" v-for="article in articleData"> -->
+            <!-- <post-item ></post-item> -->
+          <!-- </div> -->
+          <div class="post-item" v-for="article in articleData">
+            <post-item :article="article"> </post-item>
           </div>
         </div>
         <nav id="pagination">
-          <Pagination />
+          <Pagination v-bind="paginationProps" />
         </nav>
       </div>
     </template>
@@ -77,6 +35,14 @@
 import { RouteLocationRaw } from "vue-router";
 import ContentBar from "~~/components/contentBar.vue";
 import TagNav from "~~/components/home/tagNav.vue";
+import postItem from "~~/components/home/postItem.vue";
+import { getAllTag_hone, getArticleList } from "~~/api";
+import { Article } from "~~/types";
+const paginationProps = reactive({
+  pageSize: 10,
+  currentPage: 1,
+  total:10,
+});
 const contentNavData = ref<
   {
     name: string;
@@ -141,10 +107,29 @@ const contentNavData = ref<
     name: "生活日常",
   },
 ]);
+const articleData = ref<Article[]>([])
 
 const handleMoreClick = () => {
   console.log("更多");
 };
+
+const getArticle = async () => {
+  //获取文章列表
+  const { data: articleList } = await useAsyncData("articleList", () =>
+    getArticleList(paginationProps.pageSize, paginationProps.currentPage)
+  );
+  articleData.value = articleList.value.nodes
+  console.log(articleData.value)
+  paginationProps.total = articleList.value.totalCount
+}
+
+const getData = async () => {
+  getArticle()
+};
+
+
+
+getData()
 </script>
 
 <style scoped lang="scss">

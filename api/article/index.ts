@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import _ from "lodash";
 import { query, mutation } from "../request";
 
-export async function getArticleList(limit: number = 10, offset: number = 0) {
+export async function getArticleList(limit: number = 10, page: number = 0) {
   let res = await query<{ getArticleList: Pagination<Article> }>(
     gql`
       query getArticleList($limit: Int!, $offset: Int!) {
@@ -13,20 +13,9 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
           nodes {
             id
             title
-            viewNum
-            summary
-            content
-            contentNum
-            likes
-            weight
-            isPublic
+            pic
             createTime
-            updateTime
             tags {
-              id
-              name
-            }
-            groups {
               id
               name
             }
@@ -36,7 +25,7 @@ export async function getArticleList(limit: number = 10, offset: number = 0) {
     `,
     {
       limit,
-      offset,
+      offset:(page - 1) * limit,
     },
     {
       fetchPolicy: "cache-and-network",

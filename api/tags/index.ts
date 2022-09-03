@@ -9,7 +9,7 @@ export async function getAllTag(type: TagType) {
   }>(
     gql`
       query GetAllTag($type: Float!) {
-        getAllTag(type: $type) {
+        getAllTagByType(type: $type) {
           id
           name
           createTime
@@ -173,4 +173,21 @@ export async function getTagByNameVague(name: string) {
       fetchPolicy: "cache-and-network",
     }
   );
+}
+
+export async function getAllTag_hone() {
+  const res = await query<{
+    getAllTag:Tag[]
+  }>(
+    gql`
+      query getAllTag {
+        getAllTag {
+          id
+          name
+        }
+      }
+    `,
+    {}
+  );
+  return res.getAllTag
 }

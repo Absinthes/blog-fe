@@ -2,29 +2,18 @@
   <card hover-border-color="var(--theme)">
     <div class="post">
       <div class="left">
-        <img :src="src" alt="" />
+        <img :src="article.pic" alt="" />
       </div>
       <div class="right">
         <div class="title">
-          <h3>预测一波苹果2022秋季发布会</h3>
+          <h3>{{article.title}}</h3>
         </div>
         <div class="meta">
-          <div class="tags" ref="tags" @wheel.prevent="handleWheel">
-            <div class="tag"><span>#</span>iOS</div>
-            <div class="tag"><span>#</span>闲聊</div>
-            <div class="tag"><span>#</span>iOS</div>
-            <div class="tag"><span>#</span>闲聊</div>
-            <div class="tag"><span>#</span>iOS</div>
-            <div class="tag"><span>#</span>闲聊</div>
-            <div class="tag"><span>#</span>iOS</div>
-            <div class="tag"><span>#</span>闲聊</div>
-            <div class="tag"><span>#</span>iOS</div>
-            <div class="tag"><span>#</span>闲聊</div>
-            <div class="tag"><span>#</span>iOS</div>
-            <div class="tag"><span>#</span>闲聊</div>
+          <div class="tags" ref="tagsRef" @wheel.prevent="handleWheel">
+            <div class="tag" v-for="tag in article.tags"><span>#</span>{{tag.name}}</div>
           </div>
           <div class="time">
-            8/16
+            {{dayjs(+article.createTime).format("YYYY/MM/DD")}}
           </div>
         </div>
       </div>
@@ -33,17 +22,18 @@
 </template>
 
 <script setup lang="ts">
-const props = withDefaults(
+import { Article } from '~~/types';
+import dayjs  from "dayjs"
+
+const {article} = withDefaults(
   defineProps<{
-    src?: string;
+    article:Article
   }>(),
-  {
-    src: "/public/微信图片_20220824211856.jpg",
-  }
+  {}
 );
-const tags = ref();
+const tagsRef = ref();
 const handleWheel = (event) => {
-  tags.value.scrollLeft += event.deltaY;
+  tagsRef.value.scrollLeft += event.deltaY;
 };
 </script>
 
