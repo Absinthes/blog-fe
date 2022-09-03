@@ -13,7 +13,14 @@ export async function getArticleList(limit: number = 10, page: number = 0) {
           nodes {
             id
             title
+            viewNum
             pic
+            summary
+            content
+            contentNum
+            likes
+            weight
+            isPublic
             createTime
             tags {
               id
