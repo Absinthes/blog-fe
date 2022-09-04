@@ -49,7 +49,10 @@
             <img class="swiper-bg" :src="it.url" alt="" />
             <article class="swiper-item-content">
               <div class="author-box">
-                <img src="/public/微信图片_20220824211856.jpg" alt="" />
+                <img
+                  src="/public/崩坏星穹铁道 黑塔 - QuAn_的插画small.jpg"
+                  alt=""
+                />
                 <span>Absinthe.</span>
               </div>
               <h1>Artificial Intelligence Beyond Imaginations</h1>
@@ -68,7 +71,7 @@
       </swiper>
     </nav>
     <article class="content">
-      <ClassifyList :article-list="articleList" />
+      <ClassifyList :article-list="articleList" @article-click="articleClick" />
     </article>
     <nav class="pagination">
       <Pagination v-bind="queryParams" />
@@ -83,7 +86,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { getArticleList, getType } from "~~/api";
-import { Type } from "~~/types";
+import { Article, Type } from "~~/types";
+
+definePageMeta({
+  keepalive: true
+})
 
 const route = useRoute();
 const router = useRouter();
@@ -95,14 +102,6 @@ const queryParams = reactive({
   currentPage: 1,
   pageNumber: 0,
   total: 0,
-});
-
-const { data: menuList } = await useAsyncData(async () => {
-  let { nodes } = await getType();
-  nodes.unshift({
-    name: "All",
-  });
-  return nodes;
 });
 const menuBox = ref();
 const swiperList = ref([
@@ -116,7 +115,20 @@ const swiperList = ref([
     url: "/public/wallhaven-z8dg9y.png",
   },
 ]);
-const { data: articleList } = await useAsyncData(async () => {
+const menuList = ref<Type[]>();
+useAsyncData(async () => {
+  let { nodes } = await getType();
+  nodes.unshift({
+    name: "All",
+  });
+  return nodes;
+}).then(({ data }) => {
+  menuList.value = data.value;
+});
+
+const articleList = ref<Article[]>([]);
+let articleListRefresh;
+useAsyncData(async () => {
   const { pageSize: limit, currentPage } = queryParams;
   if (currentClassify.value === "All") {
     const { nodes, totalCount } = await getArticleList(
@@ -124,10 +136,13 @@ const { data: articleList } = await useAsyncData(async () => {
       limit * (currentPage - 1)
     );
     queryParams.total = totalCount;
-    queryParams.pageNumber = Math.ceil(totalCount / limit)
+    queryParams.pageNumber = Math.ceil(totalCount / limit);
     return nodes;
   }
   return [];
+}).then(({ data, refresh }) => {
+  articleList.value = data.value;
+  articleListRefresh = refresh;
 });
 
 const handleWheel = (event) => {
@@ -135,6 +150,9 @@ const handleWheel = (event) => {
 };
 const menuClick = (menu: Type) => {
   router.push(`/classify/${menu.name}`);
+};
+const articleClick = (article: Article) => {
+  router.push(`/article/${article.id}`);
 };
 </script>
 
@@ -301,7 +319,7 @@ const menuClick = (menu: Type) => {
 .content {
   margin-top: 2rem;
 }
-.pagination{
+.pagination {
   margin-top: 2rem;
 }
 </style>

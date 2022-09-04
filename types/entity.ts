@@ -14,6 +14,7 @@ export type Article = {
   tags?: Tag[];
   groups?: Group[];
   comments?: Comment[];
+  type: Type
 };
 
 export enum TagType {

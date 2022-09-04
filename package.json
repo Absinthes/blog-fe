@@ -20,8 +20,12 @@
     "@vue/apollo-option": "^4.0.0-alpha.20",
     "apollo-upload-client": "^17.0.0",
     "dayjs": "^1.11.5",
+    "github-markdown-css": "^5.1.0",
     "graphql-tag": "^2.12.6",
+    "highlight.js": "^11.6.0",
     "lodash": "^4.17.21",
+    "markdown-it": "^13.0.1",
+    "markdown-it-anchor": "^8.6.4",
     "normalize.css": "^8.0.1",
     "swiper": "^8.3.2"
   }

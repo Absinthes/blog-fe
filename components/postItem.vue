@@ -38,7 +38,7 @@ const props = withDefaults(
     src?: string;
   }>(),
   {
-    src: "/public/微信图片_20220824211856.jpg",
+    src: "/public/崩坏星穹铁道 黑塔 - QuAn_的插画small.jpg",
   }
 );
 const tags = ref();

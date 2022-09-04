@@ -17,7 +17,7 @@
             <div class="author-box pointer">
               <img
                 class="author-img"
-                src="/public/微信图片_20220824211856.jpg"
+                src="/public/崩坏星穹铁道 黑塔 - QuAn_的插画small.jpg"
                 alt=""
               />
               <span>Absinthe.</span>
@@ -173,7 +173,8 @@ const articleClick = (article: Article) => {
       .summary {
         width: 100%;
         font-size: 0.9rem;
-        line-height: 1rem;
+        line-height: 1.5rem;
+        height: 3rem;
         color: var(--font-thin-color);
         display: -webkit-box;
         -webkit-box-orient: vertical;

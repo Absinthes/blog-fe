@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 import { getAllTag, getArticleByTagId } from "~~/api";
-import { Tag } from "~~/types";
+import { Article, Tag } from "~~/types";
 import TagNav from "~~/components/home/tagNav.vue";
 
 definePageMeta({
@@ -53,15 +53,15 @@ const queryParams = reactive({
 });
 
 const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS as string;
-
-const { data: tagList } = await useAsyncData(() => getAllTag(1));
-const currentTag = ref<Tag>(
-  tagList.value.find((it) => it?.name === route.params.name)
-);
-
-const { data: articleList, refresh: articleRefresh } = await useAsyncData(
-  "article",
-  async () => {
+const tagList = ref<Tag[]>([]);
+const articleList = ref<Article[]>();
+const currentTag = ref<Tag>();
+useAsyncData(`tag.${route.params.name}`, () => getAllTag(1)).then(
+  async ({ data }) => {
+    tagList.value = data.value;
+    currentTag.value = tagList.value.find(
+      (it) => it?.name === route.params.name
+    );
     const { pageSize: limit, currentPage } = queryParams;
     let { nodes, totalCount } = await getArticleByTagId(
       currentTag.value.id,
@@ -70,16 +70,11 @@ const { data: articleList, refresh: articleRefresh } = await useAsyncData(
     );
     queryParams.total = totalCount;
     queryParams.pageNumber = Math.ceil(totalCount / queryParams.pageSize);
-    return nodes;
-  },
-  {
-    lazy: true,
   }
 );
 
 const tagClick = async (tag: Tag) => {
   currentTag.value = tag;
-  await articleRefresh();
   router.push(`/tags/${tag.name}`);
 };
 </script>
