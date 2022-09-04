@@ -17,14 +17,17 @@
         </div>
         <div class="post-items">
           <!-- <div class="post-item new" v-for="article in articleData"> -->
-            <!-- <post-item ></post-item> -->
+          <!-- <post-item ></post-item> -->
           <!-- </div> -->
           <div class="post-item" v-for="article in articleData">
             <post-item :article="article"> </post-item>
           </div>
         </div>
         <nav id="pagination">
-          <Pagination v-bind="paginationProps" />
+          <Pagination
+            v-bind="paginationProps"
+            @page-change="handlePageChange"
+          />
         </nav>
       </div>
     </template>
@@ -36,12 +39,15 @@ import { RouteLocationRaw } from "vue-router";
 import ContentBar from "~~/components/contentBar.vue";
 import TagNav from "~~/components/home/tagNav.vue";
 import postItem from "~~/components/home/postItem.vue";
-import { getAllTag_hone, getArticleList } from "~~/api";
+import { getArticleList } from "~~/api";
 import { Article } from "~~/types";
+
+const route = useRoute();
+const router = useRouter();
 const paginationProps = reactive({
-  pageSize: 10,
-  currentPage: 1,
-  total:10,
+  pageSize: +route.query.limit! || 10,
+  currentPage: +route.query.page! || 1,
+  total: 20,
 });
 const contentNavData = ref<
   {
@@ -107,29 +113,52 @@ const contentNavData = ref<
     name: "生活日常",
   },
 ]);
-const articleData = ref<Article[]>([])
+const articleData = ref<Article[]>([]);
 
 const handleMoreClick = () => {
   console.log("更多");
 };
 
-const getArticle = async () => {
-  //获取文章列表
-  const { data: articleList } = await useAsyncData("articleList", () =>
-    getArticleList(paginationProps.pageSize, paginationProps.currentPage)
-  );
-  articleData.value = articleList.value.nodes
-  console.log(articleData.value)
-  paginationProps.total = articleList.value.totalCount
-}
+let articleRefe;
 
-const getData = async () => {
-  getArticle()
+useAsyncData("articleList", async () => {
+  let articleList = await getArticleList(
+    paginationProps.pageSize,
+    paginationProps.currentPage
+  );
+  articleData.value = articleList.nodes;
+  // paginationProps.total = articleList.value.totalCount;
+  return articleList;
+}).then(({ data,refresh }) => {
+  articleRefe = refresh;
+  articleData.value = data.value.nodes
+});
+
+const unWatch = watch(
+  () => [paginationProps.pageSize, paginationProps.currentPage],
+  async ([limit, page]) => {
+    articleRefe && await articleRefe();
+    router.push({
+      query: {
+        limit: limit,
+        page: page,
+      },
+    });
+  }
+);
+
+watch(route,() =>  {
+  console.log(route)
+  console.log(paginationProps)
+})
+
+const handlePageChange = (val: number) => {
+  paginationProps.currentPage = val;
 };
 
-
-
-getData()
+// onUnmounted(() => {
+//   unWatch();
+// });
 </script>
 
 <style scoped lang="scss">

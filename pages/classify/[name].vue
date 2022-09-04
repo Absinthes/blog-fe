@@ -121,7 +121,7 @@ const { data: articleList } = await useAsyncData(async () => {
   if (currentClassify.value === "All") {
     const { nodes, totalCount } = await getArticleList(
       limit,
-      limit * (currentPage - 1)
+      currentPage
     );
     queryParams.total = totalCount;
     queryParams.pageNumber = Math.ceil(totalCount / limit)

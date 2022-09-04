@@ -35,7 +35,7 @@ export async function getArticleList(limit: number = 10, page: number = 0) {
       offset:(page - 1) * limit,
     },
     {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
     }
   );
   return res.getArticleList;

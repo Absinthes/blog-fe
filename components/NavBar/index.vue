@@ -82,7 +82,7 @@ const navMenu: MenuItem[] = [
   },
   {
     title: "友链",
-    url: "",
+    url: "/friendsChain",
   },
   {
     title: "我的",

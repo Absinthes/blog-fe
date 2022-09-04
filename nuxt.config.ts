@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_k11a42dhaag.css' },
+        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_tazi7yy0tq.css' },
         { rel: 'stylesheet', href: 'https://font.sec.miui.com/font/css?family=MiSans:400,500,700:Chinese_Simplify,Latin&display=swap' }
       ]
     }

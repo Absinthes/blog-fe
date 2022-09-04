@@ -13,6 +13,9 @@
 <script setup lang="ts"></script>
 
 <style scoped lang="scss">
+header {
+  height: 60px;
+}
 .web_bg {
   position: fixed;
   top: 0;
@@ -24,12 +27,12 @@
 }
 .container {
   max-width: var(--max-width);
-  margin: 60px auto 0;
+  margin: 0 auto 0;
   padding: 10px 30px;
   box-sizing: border-box;
 }
 
-.aside-content{
+.aside-content {
   width: 20%;
 }
 </style>

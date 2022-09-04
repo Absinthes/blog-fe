@@ -132,4 +132,5 @@ export type FriendsChain = {
   name?:string
   link?:string
   imgSrc?:string
+  introduction?:string
 }
