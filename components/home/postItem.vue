@@ -29,7 +29,9 @@ const {article} = withDefaults(
   defineProps<{
     article:Article
   }>(),
-  {}
+  {
+    src: "/public/崩坏星穹铁道 黑塔 - QuAn_的插画small.jpg",
+  }
 );
 const tagsRef = ref();
 const handleWheel = (event) => {

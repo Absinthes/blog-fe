@@ -50,10 +50,14 @@ export async function getArticleById(id: string) {
         getArticleById(id: $ArticleId) {
           id
           title
+          viewNum
+          pic
           summary
           content
-          weight
-          isPublic
+          contentNum
+          likes
+          createTime
+          updateTime
           tags {
             id
             name
@@ -61,6 +65,12 @@ export async function getArticleById(id: string) {
           groups {
             id
             name
+            articles {
+              id
+              title
+              pic
+              summary
+            }
           }
         }
       }

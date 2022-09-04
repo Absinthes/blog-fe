@@ -20,12 +20,15 @@ const percentStyle = computed(() => {
   return `translate(-50%,${37 - percent.value * 0.7}%)`;
 });
 const isHide = computed(() => {
-  return percent.value < 10;
+  console.log(clientH)
+  if(!clientH.value) return true
+  return scrollH.value < clientH.value;
 });
 
-let totalH ;
+let totalH;
 // 可视高
-let clientH ;
+let clientH = ref(0)
+let scrollH = ref(0)
 
 const handleTop = () => {
   window.scrollTo({
@@ -36,21 +39,22 @@ const handleTop = () => {
 
 const handleBottom = () => {
   window.scrollTo({
-    top: totalH - clientH,
-    behavior:"smooth"
+    top: document.documentElement.offsetHeight,
+    behavior: "smooth",
   });
 };
 
 let computedPercent: any;
 onMounted(() => {
-  totalH = document.body.scrollHeight || document.documentElement.scrollHeight;
-  clientH = window.innerHeight || document.documentElement.clientHeight;
   let computedPercent = () => {
-    var validH = totalH - clientH;
+    totalH =
+      document.body.scrollHeight || document.documentElement.scrollHeight;
+    clientH.value = window.innerHeight || document.documentElement.clientHeight;
     // 滚动条卷去高度
-    var scrollH = document.body.scrollTop || document.documentElement.scrollTop;
+    let validH = totalH - clientH.value;
+    scrollH.value = document.body.scrollTop || document.documentElement.scrollTop;
     // 百分比
-    var result = Math.floor((scrollH / validH) * 100);
+    let result = Math.floor((scrollH.value / validH) * 100);
     percent.value = result > 100 ? 100 : result;
   };
   window.addEventListener("scroll", computedPercent);
@@ -67,7 +71,7 @@ onUnmounted(() => {
   right: 2rem;
   bottom: 2rem;
   cursor: pointer;
-  transition: opacity 0.8s,transform .8s;
+  transition: opacity 0.8s, transform 0.8s;
   .inner {
     position: relative;
     .top,
@@ -139,7 +143,7 @@ onUnmounted(() => {
 
 .hide {
   opacity: 0;
-  transform: translate(20px,20px);
+  transform: translate(20px, 20px);
   .inner {
     .top,
     .bottom,

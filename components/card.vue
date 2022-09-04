@@ -19,7 +19,6 @@ const props = withDefaults(
 .card {
   width: 100%;
   height: 100%;
-  overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 8px 16px -4px #2c2d300c;
   background-color: white;
