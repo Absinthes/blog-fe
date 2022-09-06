@@ -30,7 +30,6 @@
   main {
     position: relative;
     display: flex;
-    align-items: flex-start;
     padding: 10px 30px;
     margin: 0 auto 0;
     max-width: var(--max-width);

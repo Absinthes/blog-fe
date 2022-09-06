@@ -2,7 +2,7 @@
   <card hover-border-color="var(--theme)">
     <div class="post">
       <div class="left">
-        <img :src="article.pic" alt="" />
+        <img :src="imgAddress + article.pic" alt="" />
       </div>
       <div class="right">
         <div class="title">
@@ -28,9 +28,10 @@ import dayjs  from "dayjs"
 const {article} = withDefaults(
   defineProps<{
     article:Article
+    imgAddress?: string
   }>(),
   {
-    src: "/public/崩坏星穹铁道 黑塔 - QuAn_的插画small.jpg",
+    imgAddress: import.meta.env.VITE_BASE_IMG_ADDRESS as string,
   }
 );
 const tagsRef = ref();
@@ -44,6 +45,8 @@ const handleWheel = (event) => {
   display: flex;
   height: 100%;
   width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
   &:hover {
     .left {
       img {

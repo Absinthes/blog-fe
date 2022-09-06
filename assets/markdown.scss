@@ -1,0 +1,22 @@
+.markdown-body {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    a {
+      color: var(--font-color);
+      background: linear-gradient(180deg, #bf242a 90%, #bf242a 0) no-repeat;
+      background-size: var(--p, 0%);
+      transition: background-size 0.3s, padding 0.3s;
+      padding: 5px 15px 5px 0;
+      &:hover {
+        --p: 100%;
+        color: white !important;
+        text-decoration: none;
+        padding-left: 5px;
+      }
+    }
+  }
+}

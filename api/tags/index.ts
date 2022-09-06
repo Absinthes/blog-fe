@@ -9,7 +9,7 @@ export async function getAllTag(type: TagType) {
   }>(
     gql`
       query GetAllTag($type: Float!) {
-        getAllTagByType(type: $type) {
+        getAllTag(type: $type) {
           id
           name
           createTime

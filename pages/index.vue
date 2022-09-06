@@ -26,6 +26,9 @@
         <nav id="pagination">
           <Pagination
             v-bind="paginationProps"
+            :page-number="
+              Math.ceil(paginationProps.total / paginationProps.pageSize)
+            "
             @page-change="handlePageChange"
           />
         </nav>
@@ -47,7 +50,7 @@ const router = useRouter();
 const paginationProps = reactive({
   pageSize: +route.query.limit! || 10,
   currentPage: +route.query.page! || 1,
-  total: 20,
+  total: 0,
 });
 const contentNavData = ref<
   {
@@ -127,17 +130,17 @@ useAsyncData("articleList", async () => {
     paginationProps.currentPage
   );
   articleData.value = articleList.nodes;
-  // paginationProps.total = articleList.value.totalCount;
   return articleList;
-}).then(({ data,refresh }) => {
+}).then(({ data, refresh }) => {
   articleRefe = refresh;
-  articleData.value = data.value.nodes
+  articleData.value = data.value.nodes;
+  paginationProps.total = data.value.totalCount
 });
 
 const unWatch = watch(
   () => [paginationProps.pageSize, paginationProps.currentPage],
   async ([limit, page]) => {
-    articleRefe && await articleRefe();
+    articleRefe && (await articleRefe());
     router.push({
       query: {
         limit: limit,
@@ -147,10 +150,10 @@ const unWatch = watch(
   }
 );
 
-watch(route,() =>  {
-  console.log(route)
-  console.log(paginationProps)
-})
+watch(route, () => {
+  console.log(route);
+  console.log(paginationProps);
+});
 
 const handlePageChange = (val: number) => {
   paginationProps.currentPage = val;
@@ -188,5 +191,8 @@ const handlePageChange = (val: number) => {
   width: 100%;
   height: 100%;
   padding-left: 0.5rem;
+}
+#pagination {
+  margin-top: 1rem;
 }
 </style>

@@ -1,5 +1,5 @@
 :root {
-  --theme: #425aef;
+  --theme: #4a5cc3;
   --white: #fff;
   --card-bg: #fff;
   --card-border: #e3e8f7;
@@ -25,7 +25,10 @@
   --maskbgdeep: rgba(255, 255, 255, 0.85);
   --secondbg: #f1f3f8;
   --top-nav-height: 60px;
-  --color-red: #ee4d50cc;
+  --color-pink: #db5a6a;
+  --color-red: #f30c01;
+  --selection-color: #fff;
+  --selection-bg: #000;
 }
 
 body {
@@ -61,4 +64,9 @@ body[scroll]::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.7);
   transition: 0s;
+}
+
+::selection{
+  color: var(--selection-color);
+  background-color: var(--selection-bg);
 }

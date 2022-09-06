@@ -5,10 +5,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_tazi7yy0tq.css' },
+        { rel: 'stylesheet', href: 'https://at.alicdn.com/t/c/font_3605429_2lvfudzu459.css' },
         { rel: 'stylesheet', href: 'https://font.sec.miui.com/font/css?family=MiSans:400,500,700:Chinese_Simplify,Latin&display=swap' }
       ]
     }
   },
-  css: ['normalize.css/normalize.css', '@/assets/global.css'],
+  css: ['normalize.css/normalize.css', '@/assets/global.scss', '@/assets/markdown.scss'],
 })
