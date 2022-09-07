@@ -134,4 +134,11 @@ export type FriendsChain = {
   link?:string
   imgSrc?:string
   introduction?:string
+  type?:FriendsChianType
+}
+
+export type FriendsChianType = {
+  id?:string
+  name?:string
+  friendsChains?:FriendsChain[]
 }

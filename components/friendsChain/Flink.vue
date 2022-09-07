@@ -17,8 +17,21 @@
       </div>
       <div class="group">
         <div class="group-wrapper">
-          <div class="group-item" v-for="item in data">
-            <img :src="item.imgSrc" alt="" />
+          <div class="group-pair" v-for="i in Math.floor(data.length / 2)">
+            <div class="group-item">
+              <img :src="data[(i - 1) * 2].imgSrc" alt="" />
+            </div>
+            <div class="group-item">
+              <img :src="data[(i - 1) * 2 + 1].imgSrc" alt="" />
+            </div>
+          </div>
+          <div class="group-pair" v-for="i in Math.floor(data.length / 2)">
+            <div class="group-item">
+              <img :src="IMG_ADDRESS + data[(i - 1) * 2].imgSrc" alt="" />
+            </div>
+            <div class="group-item">
+              <img :src="IMG_ADDRESS + data[(i - 1) * 2 + 1].imgSrc" alt="" />
+            </div>
           </div>
         </div>
       </div>
@@ -31,6 +44,9 @@
         <div class="title">
           <h3>申请友链</h3>
         </div>
+      </div>
+      <div class="content">
+        
       </div>
     </card>
   </div>
@@ -47,6 +63,10 @@ const { data } = withDefaults(
     data: [],
   }
 );
+
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS
+
+const form = ref<FriendsChain>({});
 const status = ref<"default" | "apply">("default");
 
 const switchStatus = (s: "default" | "apply") => {
@@ -59,6 +79,7 @@ const switchStatus = (s: "default" | "apply") => {
   position: relative;
   transform-style: preserve-3d;
   perspective: 3000px;
+  overflow: hidden;
   // height: 450px;
   .card {
     height: 28rem;
@@ -111,21 +132,29 @@ const switchStatus = (s: "default" | "apply") => {
     .group {
       .group-wrapper {
         height: 20rem;
-        padding-top: 6.5rem;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        animation: rowup 120s linear infinite;
-        .group-item {
-          height: 8rem;
-          overflow: hidden;
-          border-radius: 50%;
+        padding-top: 7rem;
+        animation: rowup 5s linear infinite normal;
+        white-space: nowrap;
+        // transform: translate(-50%);
+        .group-pair {
           display: inline-block;
-          margin: 1rem;
-          img {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
+          width: 8.5rem;
+          height: 8.5rem;
+          white-space: initial;
+          margin: 0 1rem;
+          .group-item {
+            overflow: hidden;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 2px 16px -3px rgba(0, 0, 0, 0.15);
+            &:last-child {
+              transform: translate(-50%);
+            }
+            img {
+              height: 100%;
+              width: 100%;
+              object-fit: cover;
+            }
           }
         }
       }
@@ -184,11 +213,11 @@ const switchStatus = (s: "default" | "apply") => {
   }
 
   @keyframes rowup {
-    0%{
-      transform: translate(0);
+    0% {
+      transform: translateX(0);
     }
     100% {
-      transform: translate(-100%);
+      transform: translateX(-50%);
     }
   }
 }

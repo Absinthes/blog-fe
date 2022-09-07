@@ -3,12 +3,12 @@
     <card class="card">
       <div class="wrapper">
         <div class="top">
-          <img :src="data.imgSrc" alt="" />
+          <img :src="IMG_ADDRESS + data.imgSrc" alt="" />
         </div>
         <div class="bottom">
           <div class="thumbnail">
             <div class="thumbnail-wrapper">
-              <img :src="data.imgSrc" alt="" />
+              <img :src="IMG_ADDRESS + data.imgSrc" alt="" />
             </div>
           </div>
           <div class="text">
@@ -27,6 +27,8 @@
 
 <script setup lang="ts">
 import { FriendsChain } from "~~/types";
+
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS
 
 const { data } = defineProps<{
   data?: FriendsChain;

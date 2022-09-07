@@ -20,7 +20,6 @@ const percentStyle = computed(() => {
   return `translate(-50%,${37 - percent.value * 0.7}%)`;
 });
 const isHide = computed(() => {
-  console.log(clientH)
   if(!clientH.value) return true
   return scrollH.value < clientH.value;
 });

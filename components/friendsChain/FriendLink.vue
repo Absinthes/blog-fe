@@ -11,7 +11,6 @@ import FriendItem from "./FriendItem.vue";
 const { data } = defineProps<{
   data?: FriendsChain[];
 }>();
-console.log(data)
 </script>
 
 <style scoped lang="scss">
