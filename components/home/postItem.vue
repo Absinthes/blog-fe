@@ -1,19 +1,26 @@
 <template>
   <card hover-border-color="var(--theme)">
     <div class="post">
-      <div class="left">
+      <div class="left" @click="emits('articleClick', article)">
         <img :src="imgAddress + article.pic" alt="" />
       </div>
       <div class="right">
         <div class="title">
-          <h3>{{article.title}}</h3>
+          <h3>{{ article.title }}</h3>
         </div>
+        <p class="ellipsis-2 summary">{{article.summary}}</p>
         <div class="meta">
           <div class="tags" ref="tagsRef" @wheel.prevent="handleWheel">
-            <div class="tag" v-for="tag in article.tags"><span>#</span>{{tag.name}}</div>
+            <div
+              class="tag"
+              v-for="tag in article.tags"
+              @click="emits('tagClick', tag)"
+            >
+              <span>#</span>{{ tag.name }}
+            </div>
           </div>
           <div class="time">
-            {{dayjs(+article.createTime).format("YYYY/MM/DD")}}
+            {{ dayjs(+article.createTime).format("YYYY/MM/DD") }}
           </div>
         </div>
       </div>
@@ -22,18 +29,22 @@
 </template>
 
 <script setup lang="ts">
-import { Article } from '~~/types';
-import dayjs  from "dayjs"
+import { Article, Tag } from "~~/types";
+import dayjs from "dayjs";
 
-const {article} = withDefaults(
+const { article } = withDefaults(
   defineProps<{
-    article:Article
-    imgAddress?: string
+    article: Article;
+    imgAddress?: string;
   }>(),
   {
     imgAddress: import.meta.env.VITE_BASE_IMG_ADDRESS as string,
   }
 );
+const emits = defineEmits<{
+  (e: "articleClick", article: Article);
+  (e: "tagClick", tag: Tag);
+}>();
 const tagsRef = ref();
 const handleWheel = (event) => {
   tagsRef.value.scrollLeft += event.deltaY;
@@ -49,6 +60,7 @@ const handleWheel = (event) => {
   overflow: hidden;
   &:hover {
     .left {
+      cursor: pointer;
       img {
         transform: scale(1.1);
       }
@@ -71,34 +83,46 @@ const handleWheel = (event) => {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    padding:0 5%;
-    .title{
+    justify-content: center;
+    padding: 0 5%;
+    .title {
       cursor: pointer;
+      h3{
+        margin-top: 0;
+      }
+    }
+    .summary{
+      margin-top: 0;
+      margin-bottom: 10px;
+      height: 3rem;
+      line-height: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--font-thin-color);
     }
     .meta {
       display: flex;
       justify-content: space-between;
       font-size: 0.9rem;
       .tags {
-        display: flex;
-        max-width: 80%;
+        max-width: 75%;
         overflow: hidden;
+        text-overflow:ellipsis;
         white-space: nowrap;
         .tag {
-          cursor: pointer;
+          display: inline-block;
           margin-right: 0.5rem;
+          cursor: pointer;
           &:hover {
             color: var(--theme);
           }
           span {
-            opacity: 0.4;
+            color: var(--font-thin-deep-color);
           }
         }
       }
-      .time{
-        opacity: .4;
-        cursor:default;
+      .time {
+        opacity: 0.4;
+        cursor: default;
       }
     }
   }

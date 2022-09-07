@@ -19,11 +19,10 @@ export function getMarkdownIt(callback?: Function) {
     highlight: function (str, lang) {
       if (lang && hljs.getLanguage(lang)) {
         try {
-          // return hljs.highlight(str, {
-          //   language: lang,
-          // }).value;
-
-          return `<div class="copyCode">复制代码</div>${hljs.highlight(str, { language: lang }).value}`;
+          const replaceStr = str.replace(/'/g, '\"')
+          return `<div class="copyCode" data-copy='${replaceStr}'>复制代码</div>${
+            hljs.highlight(replaceStr, { language: lang }).value
+          }`;
         } catch (__) {}
       }
 

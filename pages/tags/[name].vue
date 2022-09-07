@@ -8,16 +8,16 @@
               class="tags-item"
               v-for="it in tagList"
               @click="tagClick(it)"
-              :class="{ active: currentTag.name == it.name }"
+              :class="{ active: currentTag?.name == it?.name }"
             >
               <span class="label">#</span>
-              <span class="title">{{ it.name }}</span>
+              <span class="title">{{ it?.name }}</span>
               <span class="num">{{ it.articles.length }}</span>
             </div>
           </aside>
           <ArticleList
             v-if="articleList"
-            :title="currentTag.name"
+            :title="currentTag?.name"
             :articleList="articleList"
             :imgAddress="IMG_ADDRESS"
             @tagClick="tagClick"
@@ -56,22 +56,29 @@ const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS as string;
 const tagList = ref<Tag[]>([]);
 const articleList = ref<Article[]>();
 const currentTag = ref<Tag>();
-useAsyncData(`tag.${route.params.name}`, () => getAllTag(1)).then(
-  async ({ data }) => {
+
+useAsyncData(() => getAllTag("Article"))
+  .then(({ data }) => {
     tagList.value = data.value;
-    currentTag.value = tagList.value.find(
-      (it) => it?.name === route.params.name
-    );
-    const { pageSize: limit, currentPage } = queryParams;
-    let { nodes, totalCount } = await getArticleByTagId(
-      currentTag.value.id,
-      limit,
-      limit * (currentPage - 1)
-    );
-    queryParams.total = totalCount;
-    queryParams.pageNumber = Math.ceil(totalCount / queryParams.pageSize);
-  }
-);
+    currentTag.value = tagList.value.find((it) => {
+      const res = it.name.trim() == (route.params.name as string).trim();
+      return res;
+    });
+    return useAsyncData(`articleList.${currentTag.value.name}`, async () => {
+      const { pageSize: limit, currentPage } = queryParams;
+      let { nodes, totalCount } = await getArticleByTagId(
+        currentTag.value.id,
+        limit,
+        limit * (currentPage - 1)
+      );
+      queryParams.total = totalCount;
+      queryParams.pageNumber = Math.ceil(totalCount / queryParams.pageSize);
+      return nodes;
+    });
+  })
+  .then(({ data }) => {
+    articleList.value = data.value;
+  });
 
 const tagClick = async (tag: Tag) => {
   currentTag.value = tag;

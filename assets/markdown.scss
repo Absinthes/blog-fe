@@ -1,4 +1,8 @@
 .markdown-body {
+  ::selection {
+    color: var(--selection-color);
+    background-color: var(--selection-bg);
+  }
   h1,
   h2,
   h3,
@@ -18,5 +22,10 @@
         padding-left: 5px;
       }
     }
+  }
+  table{
+    display: table;
+    width: 100%;
+
   }
 }

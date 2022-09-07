@@ -97,6 +97,7 @@ const handleWheel = (e) => {
   }
   .directory-item-box {
     height: 600px;
+    overflow: hidden;
     overflow-y: scroll;
     max-width: 100%;
     transition: background 0.3s;
