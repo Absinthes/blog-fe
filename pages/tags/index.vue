@@ -12,7 +12,7 @@
         <span class="tag-total">{{ it.articles.length }}</span>
       </NuxtLink>
     </article>
-  </NuxtLayout>
+  </NuxtLayout>  
 </template>
 
 <script setup lang="ts">
@@ -23,6 +23,7 @@ const tagList = ref<Tag[]>([]);
 
 const getData = async () => {
   const { data: res } = await useAsyncData(async () => await getAllTag(1));
+  console.log(res.value)
   tagList.value = res.value;
 };
 getData();

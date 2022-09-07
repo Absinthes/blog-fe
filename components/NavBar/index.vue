@@ -25,15 +25,31 @@
             </li>
           </ul>
         </span>
-      </div>
-      <div class="function">
-        <i class="iconfont icon-sousuo pointer"></i>
-        <i class="iconfont icon-icon_yejianqingtian pointer"></i>
+        <div class="icofont-box">
+          <div class="search-box" :class="{ active: searchActive }">
+            <label class="search-label">
+              <i
+                class="iconfont icon-sousuo2 pointer search-icon"
+                @click="searchActive = true"
+              ></i>
+              <input
+                type="text"
+                class="search"
+                v-model.lazy="searchValue"
+                @blur="searchActive = false"
+                placeholder="请输入内容"
+                @change="emits('searchChange', searchValue)"
+                @keydown.enter="emits('searchChange', searchValue)"
+              />
+            </label>
+          </div>
+          <i class="iconfont icon-gfcaidan pointer"></i>
+        </div>
       </div>
     </div>
     <div class="now-title">
       <span :class="{ show: direction === 'bottom' }" @click="backTop">{{
-        route.meta.title
+        navTitle
       }}</span>
     </div>
   </nav>
@@ -49,6 +65,7 @@ type MenuItem = {
 };
 const route = useRoute();
 const router = useRouter();
+const navTitle = useNavTitle();
 const navMenu: MenuItem[] = [
   {
     title: "文库",
@@ -90,6 +107,11 @@ const navMenu: MenuItem[] = [
   },
 ];
 const direction = ref<"top" | "bottom">("top");
+const searchActive = ref(false);
+const searchValue = ref("");
+const emits = defineEmits<{
+  (e: "searchChange", value: string);
+}>();
 
 let prevScrollTop = ref(0);
 const handlerScroll = (e: Event) => {
@@ -99,7 +121,7 @@ const handlerScroll = (e: Event) => {
   } else {
     direction.value = "top";
   }
-  prevScrollTop.value = scrollTop;  
+  prevScrollTop.value = scrollTop;
 };
 const throttleHandleScroll = _.throttle(handlerScroll, 300);
 onMounted(() => {
@@ -114,8 +136,8 @@ const backTop = () => {
 };
 
 const handlerClick = (it: MenuItem) => {
-  router.push(it.url)
-}
+  router.push(it.url);
+};
 </script>
 
 <style scoped lang="scss">
@@ -127,9 +149,12 @@ const handlerClick = (it: MenuItem) => {
   margin: 0 auto;
   border-bottom: 1px solid transparent;
   color: var(--font-color);
-  backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: blur(20px);
   transition: background 0.3s ease-in-out;
   z-index: 99;
+  &:dark {
+    color: var(--white);
+  }
   a {
     text-decoration: none;
     color: currentColor;
@@ -169,14 +194,28 @@ const handlerClick = (it: MenuItem) => {
   transition: transform 0.3s ease-in-out;
   .menu-item {
     position: relative;
-    padding: 8px 20px;
-    margin: 0 7px;
+    padding: 8px 5px;
+    margin: 0 22px;
     border-radius: var(--normal-radius);
-    transition: all 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
+    &::after{
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(var(--theme) 0 0) no-repeat;
+      background-size: var(--p, 0%);
+      background-position: 0%;
+      transition: background-size 0.3s;
+    }
     &:hover {
-      background-color: var(--theme);
-      color: var(--white);
-      font-weight: 700;
+      color: var(--theme);
+      &::after{
+        --p: 100%;
+      }
     }
     &:hover .menu-item-children {
       border: 1px solid var(--theme);
@@ -225,6 +264,43 @@ const handlerClick = (it: MenuItem) => {
   }
   &.hide {
     transform: translateY(-60px);
+  }
+  .icofont-box {
+    display: flex;
+    align-items: center;
+    .iconfont {
+      font-size: 1.5rem;
+      vertical-align: 1ex;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      margin-right: 17px;
+      border-radius: 2rem;
+      background-color: transparent;
+      transform: background-color 0.3s;
+      &.active {
+        background-color: #eff0f8;
+        & .search {
+          width: 200px;
+        }
+      }
+      .search-icon {
+        margin-right: 5px;
+      }
+      .search {
+        width: 0px;
+        outline: none;
+        border: 0;
+        background-color: transparent;
+        transition: width 0.3s;
+      }
+      .search-label {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 }
 

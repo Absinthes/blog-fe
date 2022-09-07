@@ -283,6 +283,7 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
 </style>
 
 <style lang="scss">
+  @import "~~/assets/markdown.scss";
   .markdown-body{
     .highlight pre, pre {
       position: relative;

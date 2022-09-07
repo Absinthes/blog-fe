@@ -26,4 +26,5 @@ export default defineNuxtConfig({
   vite: {
    
   },
-});
+  css: ['normalize.css/normalize.css', '@/assets/global.css'],
+})

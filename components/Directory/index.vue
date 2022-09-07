@@ -75,13 +75,13 @@ const handleWheel = (e) => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: linear-gradient(var(--color-red) 0 0) no-repeat;
+    background: linear-gradient(var(--color-pink) 0 0) no-repeat;
     background-position: 0% 90%;
     background-size: var(--p, 0%) 3%;
     transition: 0.4s;
     &:hover {
       --p: 100%;
-      color: var(--color-red);
+      color: var(--color-pink);
     }
   }
   .title {
