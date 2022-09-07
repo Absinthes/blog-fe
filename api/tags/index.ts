@@ -3,15 +3,16 @@ import { Pagination, StatusModel } from "@/types/common";
 import gql from "graphql-tag";
 import { mutation, query } from "../request";
 
-export async function getAllTag(type: TagType) {
+export async function getAllTag(name: string) {
   const res = await query<{
-    getAllTag: Tag[];
+    getAllTagByTypeName: Tag[];
   }>(
     gql`
-      query GetAllTag($type: Float!) {
-        getAllTag(type: $type) {
+      query GetAllTagByTypeName($name: String!) {
+        getAllTagByTypeName(name: $name) {
           id
           name
+          weight
           createTime
           articles {
             id
@@ -20,13 +21,13 @@ export async function getAllTag(type: TagType) {
       }
     `,
     {
-      type,
+      name,
     },
     {
       fetchPolicy: "network-only",
     }
   );
-  return res.getAllTag;
+  return res.getAllTagByTypeName;
 }
 
 export async function getTagList(
@@ -177,7 +178,7 @@ export async function getTagByNameVague(name: string) {
 
 export async function getAllTag_hone() {
   const res = await query<{
-    getAllTag:Tag[]
+    getAllTag: Tag[];
   }>(
     gql`
       query getAllTag {
@@ -189,5 +190,5 @@ export async function getAllTag_hone() {
     `,
     {}
   );
-  return res.getAllTag
+  return res.getAllTag;
 }

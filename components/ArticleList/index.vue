@@ -10,7 +10,6 @@
           <div v-for="article in it" class="article-item">
             <img
               :src="imgAddress + article.pic"
-              :alt="imgAddress + article.pic"
               @click="emits('articleClick', article)"
             />
             <div class="info">

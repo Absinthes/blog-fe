@@ -70,6 +70,7 @@ export async function getArticleById(id: string) {
               title
               pic
               summary
+              createTime
             }
           }
         }

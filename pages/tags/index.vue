@@ -22,7 +22,7 @@ import { Tag } from "~~/types";
 const tagList = ref<Tag[]>([]);
 
 const getData = async () => {
-  const { data: res } = await useAsyncData(async () => await getAllTag(1));
+  const { data: res } = await useAsyncData(async () => await getAllTag("Article"));
   console.log(res.value)
   tagList.value = res.value;
 };
