@@ -139,7 +139,6 @@ let navHeight;
 let rootTag: number;
 
 useAsyncData(`article.${route.params.id}`, async () => {
-  console.log("request");
   let res = await getArticleById(route.params.id as string);
   return res;
 }).then(({ data }) => {

@@ -19,6 +19,8 @@ export async function getGroupList(limit: number = 10, offset: number = 0) {
             articles {
               id
               title
+              viewNum
+              likes
               createTime
             }
             createTime
@@ -37,6 +39,45 @@ export async function getGroupList(limit: number = 10, offset: number = 0) {
     }
   );
   return res.getGroupList;
+}
+
+export async function getGroupById(id: number) {
+  let res = await query<{ getGroupById: Group }>(
+    gql`
+      query GetGroupById($id: Int!) {
+        getGroupById(id: $id) {
+          id
+          name
+          pic
+          describe
+          weight
+          createTime
+          articles {
+            id
+            title
+            viewNum
+            pic
+            summary
+            contentNum
+            likes
+            weight
+            createTime
+            tags {
+              id
+              name
+            }
+          }
+        }
+      }
+    `,
+    {
+      id,
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getGroupById;
 }
 
 export async function createGroup(input: GroupCreateInput) {

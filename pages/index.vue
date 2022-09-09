@@ -12,10 +12,7 @@
           :modules="modules"
           :effect="'cards'"
           :speed="600"
-          :autoplay="{
-            delay: 2500,
-            disableOnInteraction: false,
-          }"
+          :autoplay="true"
           :pagination="{
             clickable: true,
           }"
@@ -39,7 +36,7 @@
         </swiper>
       </nav>
       <div class="groupList-box">
-        <GroupItem v-for="group in groupList" :group="group" />
+        <GroupItem v-for="group in groupList" :group="group" :len="5" />
       </div>
       <div class="default">
         <div class="contetn-bar">
@@ -246,6 +243,13 @@ useAsyncData("groupList-2", () => getGroupList(2, 0)).then(({ data }) => {
 
 .swiper-box {
   margin-bottom: 1rem;
+  & :deep(.swiper-button-prev){
+    color: inherit;
+  }
+
+  & :deep(.swiper-button-next){
+    color: inherit;
+  }
 }
 
 .swiper {

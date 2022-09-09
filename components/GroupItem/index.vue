@@ -5,7 +5,7 @@
         <img :src="imgPrefix + group.pic" alt="" />
         <div class="heat-box">
           <i class="iconfont icon-icon1"></i>
-          <span>5348</span>
+          <span>{{getHeat}}°</span>
         </div>
       </div>
       <div class="describe-box">
@@ -16,15 +16,18 @@
             <i class="iconfont icon-wenzhang1"></i>
             <span>{{ group.articles.length }}篇文章</span>
           </div>
-          <button class="moreArticle">
+          <NuxtLink :to="`/group/${group.id}`" class="moreArticle">
             <i class="iconfont icon-xiangyou"></i>
             <span>更多文章</span>
-          </button>
+          </NuxtLink>
         </div>
       </div>
     </div>
     <div class="article-list">
-      <div v-for="article in group.articles" class="article-list-item">
+      <div
+        v-for="article in group.articles.slice(0, len)"
+        class="article-list-item"
+      >
         <NuxtLink :to="`/article/${article.id}`" class="title">{{
           article.title
         }}</NuxtLink>
@@ -46,6 +49,7 @@ import { Group } from "~~/types";
 import relativeTime from "dayjs/plugin/relativeTime.js";
 import zhCN from "dayjs/locale/zh-cn.js";
 import dayjs from "dayjs";
+import { computedHeat } from "~~/utils/computedHeat";
 dayjs.locale(zhCN);
 dayjs.extend(relativeTime);
 
@@ -53,11 +57,20 @@ const props = withDefaults(
   defineProps<{
     group: Group;
     imgPrefix?: string;
+    len?: number;
   }>(),
   {
+    len: Infinity,
     imgPrefix: import.meta.env.VITE_BASE_IMG_ADDRESS as string,
   }
 );
+
+const getHeat = computed(() => {
+  const { articles } = props.group;
+  return articles.reduce((a, b) => {
+    return a + computedHeat(b.viewNum, b.likes);
+  }, 0);
+});
 </script>
 
 <style lang="scss" scoped>
