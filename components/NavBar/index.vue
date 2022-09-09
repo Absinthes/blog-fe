@@ -95,7 +95,7 @@ const navMenu: MenuItem[] = [
   },
   {
     title: "专栏",
-    url: "",
+    url: "/group",
   },
   {
     title: "友链",

@@ -92,6 +92,10 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-cards";
 
+definePageMeta({
+  keepalive: true
+})
+
 const route = useRoute();
 const router = useRouter();
 const paginationProps = reactive({

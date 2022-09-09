@@ -1,11 +1,16 @@
 <template>
-  <Card class="group-item">
+  <div class="group-item card" ref="groupItemRef">
     <div class="group-info-box">
       <div class="group-img-box">
-        <img :src="imgPrefix + group.pic" alt="" />
+        <img
+          class="group-img"
+          :src="imgPrefix + group.pic"
+          alt=""
+          @load="handlerLoad"
+        />
         <div class="heat-box">
           <i class="iconfont icon-icon1"></i>
-          <span>{{getHeat}}°</span>
+          <span>{{ getHeat }}°</span>
         </div>
       </div>
       <div class="describe-box">
@@ -14,7 +19,7 @@
         <div class="bottom">
           <div class="number-box">
             <i class="iconfont icon-wenzhang1"></i>
-            <span>{{ group.articles.length }}篇文章</span>
+            <span>{{ group.articles.length }} 篇文章</span>
           </div>
           <NuxtLink :to="`/group/${group.id}`" class="moreArticle">
             <i class="iconfont icon-xiangyou"></i>
@@ -41,7 +46,7 @@
         </div>
       </div>
     </div>
-  </Card>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -53,6 +58,7 @@ import { computedHeat } from "~~/utils/computedHeat";
 dayjs.locale(zhCN);
 dayjs.extend(relativeTime);
 
+const groupItemRef = ref();
 const props = withDefaults(
   defineProps<{
     group: Group;
@@ -65,15 +71,32 @@ const props = withDefaults(
   }
 );
 
+const emits = defineEmits<{
+  (e: "imgOnload", rootElement: Element);
+}>();
+
 const getHeat = computed(() => {
   const { articles } = props.group;
   return articles.reduce((a, b) => {
     return a + computedHeat(b.viewNum, b.likes);
   }, 0);
 });
+
+const handlerLoad = () => {
+  emits("imgOnload", groupItemRef.value);
+};
 </script>
 
 <style lang="scss" scoped>
+.card {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px -4px rgb(44 45 48 / 5%);
+  background-color: white;
+  border: 1px solid var(--card-border);
+  transition: border-color 0.3s;
+}
 .group-item {
   padding: 1rem;
   box-sizing: border-box;
@@ -187,6 +210,9 @@ const getHeat = computed(() => {
           color: white !important;
           text-decoration: none;
           padding-left: 5px;
+          &::before {
+            border-color: currentColor;
+          }
         }
         &::before {
           content: "";
@@ -196,6 +222,7 @@ const getHeat = computed(() => {
           height: 7px;
           border-radius: 50%;
           border: 1px solid var(--color-pink);
+          transition: border-color 0.3s;
         }
       }
       .time {

@@ -85,7 +85,7 @@ useAsyncData(`Group.${id}`, () => getGroupById(Number(id))).then(({ data }) => {
     background-position: center 25%;
     object-fit: cover;
     filter: brightness(0.8);
-    animation: img-anmition 30s infinite alternate;
+    animation: img-anmition 40s infinite alternate;
   }
   .nav-content {
     position: absolute;
