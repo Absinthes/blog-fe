@@ -41,6 +41,50 @@ export async function getArticleList(limit: number = 10, page: number = 0) {
   return res.getArticleList;
 }
 
+export async function getArticleSticky(limit: number = 10, offset: number = 0) {
+  let res = await query<{ getArticleSticky: Pagination<Article> }>(
+    gql`
+      query GetArticleSticky($input: PaginationQuerInput!) {
+        getArticleSticky(input: $input) {
+          totalCount
+          nodes {
+            id
+            title
+            pic
+            viewNum
+            summary
+            content
+            contentNum
+            likes
+            weight
+            isPublic
+            createTime
+            updateTime
+            tags {
+              id
+              name
+            }
+            groups {
+              id
+              name
+            }
+          }
+        }
+      }
+    `,
+    {
+      input: {
+        limit,
+        offset
+      }
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getArticleSticky;
+}
+
 export async function getArticleById(id: string) {
   let res = await query<{
     getArticleById: Article;

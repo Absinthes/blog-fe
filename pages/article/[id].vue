@@ -117,7 +117,6 @@ import "github-markdown-css";
 import "highlight.js/styles/atom-one-light.css";
 import { Article } from "~~/types";
 import dayjs from "dayjs";
-import { dataset } from "dom7";
 
 definePageMeta({
   keepalive: false,

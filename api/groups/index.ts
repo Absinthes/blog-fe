@@ -14,11 +14,14 @@ export async function getGroupList(limit: number = 10, offset: number = 0) {
             id
             name
             nameEn
-            createTime
+            describe
+            pic
             articles {
               id
               title
+              createTime
             }
+            createTime
           }
         }
       }

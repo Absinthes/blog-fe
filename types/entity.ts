@@ -67,8 +67,10 @@ export type Group = {
   id?: number;
   name?: string;
   nameEn?: string;
-  createTime?: string;
+  describe?: string;
+  pic?: string;
   articles?: Article[];
+  createTime?: string;
 };
 
 export type PhotoWall = {

@@ -5,7 +5,7 @@
         <img :src="imgAddress + article.pic" alt="" />
       </div>
       <div class="right">
-        <div class="title">
+        <div class="title" @click="emits('articleClick', article)">
           <h3>{{ article.title }}</h3>
         </div>
         <p class="ellipsis-2 summary">{{article.summary}}</p>
@@ -14,7 +14,7 @@
             <div
               class="tag"
               v-for="tag in article.tags"
-              @click="emits('tagClick', tag)"
+              @click.stop="emits('tagClick', tag)"
             >
               <span>#</span>{{ tag.name }}
             </div>
