@@ -44,9 +44,9 @@
         :space-between="20"
         loop
       >
-        <swiper-slide v-for="it in swiperList">
+        <swiper-slide v-for="it in bannerArticleList">
           <div class="swiper-item">
-            <img class="swiper-bg" :src="it.url" alt="" />
+            <img class="swiper-bg" :src="IMG_ADDRESS + it.pic" alt="" />
             <article class="swiper-item-content">
               <div class="author-box">
                 <img
@@ -55,15 +55,15 @@
                 />
                 <span>Absinthe.</span>
               </div>
-              <h1>Artificial Intelligence Beyond Imaginations</h1>
+              <h1>{{ it.title }}</h1>
               <p>
                 <span class="detail">
-                  Artificial Intelligence Has Been Advancing Beyond What Humans
-                  Have Imagined For Decades And Will Dominate Humans In The
-                  Coming Years,But The Question Is,Why Will It Happen
-                  Like...</span
+                  {{ it.summary }}
+                  <span v-if="it.summary?.length > 30">...</span></span
                 >
-                <span class="readMore">Read More</span>
+                <NuxtLink :to="`/article/${it.id}`" class="readMore"
+                  >Read More</NuxtLink
+                >
               </p>
             </article>
           </div>
@@ -85,17 +85,18 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { getArticleList, getType } from "~~/api";
+import { getArticleList, getArticleTop, getType } from "~~/api";
 import { Article, Type } from "~~/types";
 
 definePageMeta({
-  keepalive: true
-})
+  keepalive: true,
+});
 
 const route = useRoute();
 const router = useRouter();
 const currentClassify = ref(route.params.name);
 const modules = [Navigation, SwiperPagination];
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 
 const queryParams = reactive({
   pageSize: 10,
@@ -104,18 +105,9 @@ const queryParams = reactive({
   total: 0,
 });
 const menuBox = ref();
-const swiperList = ref([
-  {
-    url: "/public/wallhaven-e7jj6r.jpg",
-  },
-  {
-    url: "/public/wallhaven-l35jjp.jpg",
-  },
-  {
-    url: "/public/wallhaven-z8dg9y.png",
-  },
-]);
 const menuList = ref<Type[]>();
+const bannerArticleList = ref<Article[]>([]);
+
 useAsyncData(async () => {
   let { nodes } = await getType();
   nodes.unshift({
@@ -126,22 +118,26 @@ useAsyncData(async () => {
   menuList.value = data.value;
 });
 
+useAsyncData("articleBanner", () => getArticleTop()).then(({ data }) => {
+  bannerArticleList.value = data.value;
+});
+
 const articleList = ref<Article[]>([]);
 let articleListRefresh;
 useAsyncData(async () => {
   const { pageSize: limit, currentPage } = queryParams;
   if (currentClassify.value === "All") {
-    const { nodes, totalCount } = await getArticleList(
-      limit,
-      currentPage
-    );
-    queryParams.total = totalCount;
-    queryParams.pageNumber = Math.ceil(totalCount / limit);
-    return nodes;
+    return await getArticleList(limit, currentPage);
   }
   return [];
 }).then(({ data, refresh }) => {
-  articleList.value = data.value;
+  const { pageSize: limit, currentPage } = queryParams;
+  //@ts-ignore
+  queryParams.total = data.value.totalCount;
+  //@ts-ignore
+  queryParams.pageNumber = Math.ceil(data.value.totalCount / limit);
+  //@ts-ignore
+  articleList.value = data.value.nodes;
   articleListRefresh = refresh;
 });
 

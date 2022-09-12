@@ -67,8 +67,10 @@ export type Group = {
   id?: number;
   name?: string;
   nameEn?: string;
-  createTime?: string;
+  describe?: string;
+  pic?: string;
   articles?: Article[];
+  createTime?: string;
 };
 
 export type PhotoWall = {
@@ -121,6 +123,8 @@ export type LiveShared = {
 export type Type = {
   id?: string;
   name?: string;
+  nameEn?: string;
+  describe?: string;
   createTime?:string
   rootType?: Type;
   parentType?: Type;

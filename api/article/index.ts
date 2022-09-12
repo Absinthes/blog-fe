@@ -32,13 +32,92 @@ export async function getArticleList(limit: number = 10, page: number = 0) {
     `,
     {
       limit,
-      offset:(page - 1) * limit,
+      offset: (page - 1) * limit,
     },
     {
       fetchPolicy: "network-only",
     }
   );
   return res.getArticleList;
+}
+
+export async function getArticleStickyList(
+  limit: number = 10,
+  offset: number = 0
+) {
+  let res = await query<{ getArticleSticky: Pagination<Article> }>(
+    gql`
+      query GetArticleSticky($input: PaginationQuerInput!) {
+        getArticleSticky(input: $input) {
+          totalCount
+          nodes {
+            id
+            title
+            pic
+            viewNum
+            summary
+            content
+            contentNum
+            likes
+            weight
+            isPublic
+            createTime
+            updateTime
+            tags {
+              id
+              name
+            }
+            groups {
+              id
+              name
+            }
+          }
+        }
+      }
+    `,
+    {
+      input: {
+        limit,
+        offset,
+      },
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getArticleSticky;
+}
+
+export async function getArticleTop() {
+  let res = await query<{ getArticleTop: Article[] }>(
+    gql`
+      query GetArticleTop {
+        getArticleTop {
+          id
+          title
+          pic
+          viewNum
+          summary
+          content
+          contentNum
+          likes
+          weight
+          isPublic
+          createTime
+          updateTime
+          tags {
+            id
+            name
+          }
+        }
+      }
+    `,
+    {},
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getArticleTop;
 }
 
 export async function getArticleById(id: string) {
@@ -178,4 +257,58 @@ export async function getArticleByTagId(
     }
   );
   return res.getArticleByTagId;
+}
+
+export async function getArticleByTypeName(
+  name: string,
+  isRoot: boolean,
+  limit?: number,
+  offset?: number
+) {
+  let res = await query<{ getArticleByTypeName: Pagination<Article> }>(
+    gql`
+      query GetArticleByTypeName(
+        $name: String!
+        $isRoot: Boolean
+        $pagination: PaginationQuerInput
+      ) {
+        getArticleByTypeName(
+          name: $name
+          isRoot: $isRoot
+          pagination: $pagination
+        ) {
+          totalCount
+          nodes {
+            id
+            title
+            viewNum
+            pic
+            summary
+            contentNum
+            likes
+            weight
+            createTime
+            updateTime
+            tags {
+              id
+              name
+              createTime
+            }
+          }
+        }
+      }
+    `,
+    {
+      name,
+      isRoot,
+      pagination: {
+        limit,
+        offset,
+      },
+    },
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  return res.getArticleByTypeName;
 }
