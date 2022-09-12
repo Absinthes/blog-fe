@@ -8,7 +8,7 @@
         <div class="title" @click="emits('articleClick', article)">
           <h3>{{ article.title }}</h3>
         </div>
-        <p class="ellipsis-2 summary">{{article.summary}}</p>
+        <p class="ellipsis-2 summary">{{ article.summary }}</p>
         <div class="meta">
           <div class="tags" ref="tagsRef" @wheel.prevent="handleWheel">
             <div
@@ -20,7 +20,16 @@
             </div>
           </div>
           <div class="time">
-            {{ dayjs(+article.createTime).format("YYYY/MM/DD") }}
+            <span v-if="dateMode === 'time'">
+              {{ dayjs(+article.createTime).format("YYYY/MM/DD") }}
+            </span>
+            <span v-else>
+              {{
+                dayjs(+article.createTime)
+                  .fromNow()
+                  .replace(/\s/g, "")
+              }}
+            </span>
           </div>
         </div>
       </div>
@@ -30,15 +39,23 @@
 
 <script setup lang="ts">
 import { Article, Tag } from "~~/types";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+import zhCN from "dayjs/locale/zh-cn.js";
 import dayjs from "dayjs";
+dayjs.locale(zhCN);
+dayjs.extend(relativeTime);
+
+type DateMode = "time" | "text";
 
 const { article } = withDefaults(
   defineProps<{
     article: Article;
     imgAddress?: string;
+    dateMode?: DateMode;
   }>(),
   {
     imgAddress: import.meta.env.VITE_BASE_IMG_ADDRESS as string,
+    dateMode: "time",
   }
 );
 const emits = defineEmits<{
@@ -87,11 +104,13 @@ const handleWheel = (event) => {
     padding: 0 5%;
     .title {
       cursor: pointer;
-      h3{
+      h3 {
         margin-top: 0;
+        font-family: var(--font-title), MiSans, PingFang SC, Microsoft YaHei,
+          sans-serif;
       }
     }
-    .summary{
+    .summary {
       margin-top: 0;
       margin-bottom: 10px;
       height: 3rem;
@@ -106,17 +125,18 @@ const handleWheel = (event) => {
       .tags {
         max-width: 75%;
         overflow: hidden;
-        text-overflow:ellipsis;
+        text-overflow: ellipsis;
         white-space: nowrap;
         .tag {
           display: inline-block;
           margin-right: 0.5rem;
+          color: var(--font-thin-color);
           cursor: pointer;
           &:hover {
             color: var(--theme);
           }
           span {
-            color: var(--font-thin-deep-color);
+            color: currentColor;
           }
         }
       }

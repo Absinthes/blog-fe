@@ -85,7 +85,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { getArticleList, getArticleSticky, getType } from "~~/api";
+import { getArticleList, getArticleTop, getType } from "~~/api";
 import { Article, Type } from "~~/types";
 
 definePageMeta({
@@ -118,8 +118,8 @@ useAsyncData(async () => {
   menuList.value = data.value;
 });
 
-useAsyncData("articleBanner", () => getArticleSticky(5, 0)).then(({ data }) => {
-  bannerArticleList.value = data.value.nodes;
+useAsyncData("articleBanner", () => getArticleTop()).then(({ data }) => {
+  bannerArticleList.value = data.value;
 });
 
 const articleList = ref<Article[]>([]);
@@ -127,14 +127,17 @@ let articleListRefresh;
 useAsyncData(async () => {
   const { pageSize: limit, currentPage } = queryParams;
   if (currentClassify.value === "All") {
-    const { nodes, totalCount } = await getArticleList(limit, currentPage);
-    queryParams.total = totalCount;
-    queryParams.pageNumber = Math.ceil(totalCount / limit);
-    return nodes;
+    return await getArticleList(limit, currentPage);
   }
   return [];
 }).then(({ data, refresh }) => {
-  articleList.value = data.value;
+  const { pageSize: limit, currentPage } = queryParams;
+  //@ts-ignore
+  queryParams.total = data.value.totalCount;
+  //@ts-ignore
+  queryParams.pageNumber = Math.ceil(data.value.totalCount / limit);
+  //@ts-ignore
+  articleList.value = data.value.nodes;
   articleListRefresh = refresh;
 });
 

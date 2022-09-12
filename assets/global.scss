@@ -32,6 +32,7 @@
   --color-orange: 235 104 68;
   --selection-color: #fff;
   --selection-bg: #000;
+  --font-title: '阿里妈妈数黑体';
 }
 
 body {
@@ -83,4 +84,19 @@ body[scroll]::-webkit-scrollbar-thumb,
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+.underline-red-hover {
+  background: linear-gradient(var(--color-pink) 0 0) no-repeat;
+  background-position: 0% 90%;
+  background-size: var(--p, 0%) 3%;
+  transition: 0.4s;
+  &:hover {
+    --p: 100%;
+    color: var(--color-pink);
+  }
+  &.active{
+    --p: 100%;
+    color: var(--color-pink);
+  }
 }

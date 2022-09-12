@@ -123,6 +123,8 @@ export type LiveShared = {
 export type Type = {
   id?: string;
   name?: string;
+  nameEn?: string;
+  describe?: string;
   createTime?:string
   rootType?: Type;
   parentType?: Type;

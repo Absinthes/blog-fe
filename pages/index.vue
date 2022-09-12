@@ -79,7 +79,7 @@ import { RouteLocationRaw } from "vue-router";
 import ContentBar from "~~/components/contentBar.vue";
 import TagNav from "~~/components/home/tagNav.vue";
 import postItem from "~~/components/home/postItem.vue";
-import { getArticleList, getArticleSticky, getGroupList } from "~~/api";
+import { getArticleList, getArticleTop, getGroupList } from "~~/api";
 import { Article, Group } from "~~/types";
 import {
   Navigation,
@@ -213,8 +213,8 @@ const handlePageChange = (val: number) => {
 
 const modules = [Navigation, SwiperPagination, EffectCards];
 const bannerArticleList = ref<Article[]>([]);
-useAsyncData("articleBanner", () => getArticleSticky(5, 0)).then(({ data }) => {
-  bannerArticleList.value = data.value.nodes;
+useAsyncData("articleBanner", () => getArticleTop()).then(({ data }) => {
+  bannerArticleList.value = data.value;
 });
 
 const groupList = ref<Group[]>([]);

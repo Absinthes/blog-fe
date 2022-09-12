@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import { query, mutation } from "../request";
 
 export const getType = async (offset?: number, limit?: number) => {
-  let res =  await query<{
+  let res = await query<{
     getTypeByRoot: Pagination<Type>;
   }>(
     gql`
@@ -67,7 +67,7 @@ export const getType = async (offset?: number, limit?: number) => {
       fetchPolicy: "cache-and-network",
     }
   );
-  return res.getTypeByRoot
+  return res.getTypeByRoot;
 };
 
 export const deleteType = async (id: string) => {
@@ -137,21 +137,23 @@ export const updateType = async ({ name, id }: Type) => {
 };
 
 export const getTypeByName = async (name: string) => {
-  return await query<{
+  const res = await query<{
     getTypeByNameAndRoot: Type;
   }>(
     gql`
-      query getTypeByName($name: String!) {
+      query GetTypeByNameAndRoot($name: String!) {
         getTypeByNameAndRoot(name: $name) {
           id
           name
+          nameEn
+          describe
+          createTime
           childType {
             id
             name
-            childType {
-              id
-              name
-            }
+            nameEn
+            describe
+            createTime
           }
         }
       }
@@ -160,7 +162,8 @@ export const getTypeByName = async (name: string) => {
       name,
     },
     {
-      fetchPolicy:"cache-and-network"
+      fetchPolicy: "cache-and-network",
     }
   );
+  return res.getTypeByNameAndRoot
 };

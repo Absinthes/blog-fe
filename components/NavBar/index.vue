@@ -88,7 +88,7 @@ const navMenu: MenuItem[] = [
       },
       {
         title: "即刻短文",
-        url: "",
+        url: "/word/diary",
         icon: "",
       },
     ],
