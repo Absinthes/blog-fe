@@ -1,6 +1,14 @@
-import { Pagination, StatusModel } from "@/types";
+import type {
+  Pagination,
+  StatusModel,
+  Comment,
+  CommentTypeEnum,
+  EditForm,
+} from "@/types";
 import gql from "graphql-tag";
 import { query, mutation } from "../request";
+import { browserRedirect, getBrowser } from "~~/utils/tools";
+import { createCommentInput } from "~~/types/dtos";
 
 export const getCommnet = async (offset: number = 1, limit: number = 10) => {
   return await query<{ getCommentByRoot: Pagination<Comment> }>(
@@ -102,6 +110,101 @@ export const deleteComment = async (id: string) => {
     `,
     {
       deleteCommentId: id,
+    }
+  );
+};
+
+export const getCommentByArticleId = async (id: string,page:number,limit:number = 10) => {
+  const res = await query<{
+    getCommentByArticleId: Pagination<Comment>;
+  }>(
+    gql`
+      query getCommnetByArticleId($ariticleId: String!,$pagination: PaginationQuerInput!) {
+        getCommentByArticleId(ariticleId: $ariticleId, pagination: $pagination) {
+          nodes {
+            id
+            name
+            content
+            email
+            createTime
+            likes
+            browser
+            envirconment
+            children: childComment {
+              id
+              name
+              content
+              email
+              createTime
+              likes
+              browser
+              envirconment
+              parentComment {
+                id
+                name
+                content
+                email
+                createTime
+                likes
+                browser
+                envirconment
+              }
+            }
+          }
+          totalCount
+        }
+      }
+    `,
+    {
+      ariticleId: id,
+      pagination:{
+        offset:(page - 1) * limit,
+        limit
+      }
+    },
+    {
+      fetchPolicy:"network-only"
+    }
+  );
+  return res.getCommentByArticleId;
+};
+
+export const addComment = async (
+  type: CommentTypeEnum,
+  form: EditForm,
+  ariticleId?: string,
+  rootComment?: string,
+  parentComment?: string
+) => {
+  const browser = getBrowser()[0];
+  const envirconment = browserRedirect();
+  const { link, ...rest } = form;
+  const res = await mutation<
+    {
+      addComment: StatusModel;
+    },
+    {
+      comment: createCommentInput;
+    }
+  >(
+    gql`
+      mutation addComment($comment: createCommentInput!) {
+        createComment(comment: $comment) {
+          code
+          msg
+        }
+      }
+    `,
+    {
+      comment: {
+        browser,
+        envirconment,
+        ...rest,
+        type,
+        article: ariticleId,
+        rootComment,
+        parentComment,
+      },
     }
   );
 };

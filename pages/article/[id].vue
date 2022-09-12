@@ -103,6 +103,23 @@
               </div>
             </div>
           </div>
+          <div class="comment-wrapper">
+            <div class="hr">
+              <i class="iconfont icon-pinglun" />
+              <span>评论</span>
+            </div>
+
+            <div class="edit">
+              <Edit :cancel="false" :hide="false" @confirm="handleComment" />
+            </div>
+            <div class="statistics">{{ commentData.totalCount }}条评论</div>
+            <CommentCmp
+              @confirm="handleConfirm"
+              @handle-dian-zan="handleDianZan"
+              :data="commentData.nodes"
+            />
+            <Pagination v-bind="PaginationProps" @page-change="handlePageChange" />
+          </div>
         </div>
       </Card>
     </template>
@@ -110,19 +127,21 @@
 </template>
 
 <script lang="ts" setup>
-import { getArticleById } from "~~/api";
+import type { Article, Comment, EditForm, Pagination } from "@/types";
+import CommentCmp from "@/components/Comment/index.vue";
+import { CommentTypeEnum } from "@/types";
+import { addComment, getArticleById, getCommentByArticleId } from "~~/api";
 import { getMarkdownIt, mdDirectory } from "~~/utils/hook/useMarkdown";
 import Token from "markdown-it/lib/token";
 import "github-markdown-css";
 import "highlight.js/styles/atom-one-light.css";
-import { Article } from "~~/types";
 import dayjs from "dayjs";
-import { dataset } from "dom7";
+import Edit from "~~/components/Comment/edit.vue";
+import { RefreshOptions } from "nuxt/dist/app/composables/asyncData";
 
 definePageMeta({
   keepalive: false,
 });
-
 const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 const route = useRoute();
 const router = useRouter();
@@ -134,18 +153,83 @@ const articleData = ref<Article>();
 const prevArticle = ref<Article>();
 const nextArticle = ref<Article>();
 const isNextGroup = ref(false);
+const commentData = ref<Pagination<Comment>>();
+let refresh: (opts?: RefreshOptions) => Promise<void>;
+const page = ref<number>(1);
+const PaginationProps = reactive({
+  total: 100,
+  pageSize: 10,
+  currentPage: 1,
+});
 
-let clientHeight;
-let navHeight;
+let clientHeight: number;
+let navHeight: number;
 let rootTag: number;
 
 useAsyncData(`article.${route.params.id}`, async () => {
   console.log("request");
-  let res = await getArticleById(route.params.id as string);
-  return res;
-}).then(({ data }) => {
-  articleData.value = data.value;
+  let article = await getArticleById(route.params.id as string);
+  const {currentPage:page,pageSize:limit} = PaginationProps
+  let comment = await getCommentByArticleId(
+    route.params.id as string,
+    page,
+    limit
+  );
+  commentData.value = comment;
+  PaginationProps.total = comment.totalCount
+  console.log(comment.totalCount)
+  return {
+    article,
+    comment,
+  };
+}).then(({ data, refresh: rf }) => {
+  articleData.value = data.value.article;
+  // commentData.value = data.value.comment;
+  refresh = rf;
 });
+
+const handlePageChange = (p: number) => {
+  page.value = p;
+  refresh && refresh()
+};
+
+const handleConfirm = async (
+  form: EditForm,
+  reset: () => void,
+  rootComment: Comment,
+  parentComment: Comment
+) => {
+  try {
+    const res = await addComment(
+      CommentTypeEnum.article,
+      form,
+      route.params.id as string,
+      rootComment.id,
+      parentComment.id
+    );
+    reset();
+  } finally {
+    refresh && refresh();
+  }
+};
+
+const handleDianZan = (b: boolean, data: Comment) => {
+  console.log(b, data);
+};
+
+const handleComment = async (form: EditForm, reset: () => void) => {
+  //文章的评论
+  try {
+    const res = await addComment(
+      CommentTypeEnum.article,
+      form,
+      route.params.id as string
+    );
+    reset();
+  } finally {
+    refresh && refresh();
+  }
+};
 
 watch(articleData, (newVal) => {
   content.value = md.render(newVal.content);
@@ -290,6 +374,27 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
 }
 .article-box {
   padding: 3rem 1.5rem;
+  .comment-wrapper {
+    margin-top: 2rem;
+    padding: 0 0.8rem 0 2.2rem;
+    .hr {
+      display: flex;
+      text-align: center;
+      margin: 1rem 0;
+      i {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+      }
+      span {
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+    }
+    .statistics {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  }
 }
 .content-box {
   position: relative;

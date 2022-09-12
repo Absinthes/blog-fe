@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       link: [
         {
           rel: "stylesheet",
-          href: "https://at.alicdn.com/t/c/font_3605429_tazi7yy0tq.css",
+          href: "https://at.alicdn.com/t/c/font_3605429_343vx3xh2au.css",
         },
         {
           rel: "stylesheet",
@@ -18,12 +18,13 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: [
-    "normalize.css/normalize.css",
-    "@/assets/global.css",
-    "@/assets/index.css",
-  ],
+  // css: [
+  //   "normalize.css/normalize.css",
+  //   "@/assets/global.css",
+  //   "@/assets/index.css",
+  // ],
   vite: {
    
   },
+  css: ['normalize.css/normalize.css', '@/assets/global.scss'],
 })
