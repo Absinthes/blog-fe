@@ -112,16 +112,23 @@
             <div class="edit">
               <Edit :cancel="false" :hide="false" @confirm="handleComment" />
             </div>
-            <div class="statistics">{{ commentData.totalCount }}条评论</div>
+            <div class="statistics">{{ PaginationProps.total || 0 }}条评论</div>
             <CommentCmp
               @confirm="handleConfirm"
               @handle-dian-zan="handleDianZan"
-              :data="commentData.nodes"
+              :data="commentData"
             />
-            <Pagination
-              v-bind="PaginationProps"
-              @page-change="handlePageChange"
-            />
+            <div
+              class="loadMore"
+              :class="{
+                'hide':
+                  PaginationProps.pageSize * PaginationProps.currentPage >=
+                  PaginationProps.total,
+              }"
+              @click="handlePageChange"
+            >
+              More
+            </div>
           </div>
         </div>
       </Card>
@@ -156,15 +163,11 @@ const articleData = ref<Article>();
 const prevArticle = ref<Article>();
 const nextArticle = ref<Article>();
 const isNextGroup = ref(false);
-const commentData = ref<Pagination<Comment>>({
-  nodes: [],
-  totalCount: 0,
-});
-let refresh: (opts?: RefreshOptions) => Promise<void>;
-const page = ref<number>(1);
+const commentData = ref<Comment[]>([]);
+let commentRefresh: (opts?: RefreshOptions) => Promise<void>;
 const PaginationProps = reactive({
-  total: 100,
-  pageSize: 10,
+  total: 0,
+  pageSize: 1,
   currentPage: 1,
 });
 
@@ -175,33 +178,30 @@ let rootTag: number;
 useAsyncData(`article.${route.params.id}`, async () => {
   console.log("request");
   let article = await getArticleById(route.params.id as string);
-  const { currentPage: page, pageSize: limit } = PaginationProps;
-  let comment = await getCommentByArticleId(
-    route.params.id as string,
-    page,
-    limit
-  );
-  return {
-    article,
-    comment,
-  };
-}).then(({ data, refresh: rf }) => {
-  articleData.value = data.value.article;
-  commentData.value = data.value.comment;
-  PaginationProps.total = data.value.comment.totalCount;
-  refresh = rf;
+  return article;
+}).then(async ({ data }) => {
+  articleData.value = data.value;
 });
 
-const handlePageChange = async (p: number) => {
-  PaginationProps.currentPage = p;
-  const { pageSize: limit } = PaginationProps;
-  let comment = await getCommentByArticleId(
-    route.params.id as string,
-    p,
-    limit
+useAsyncData(`article.${route.params.id}.comment`, async () => {
+  const { currentPage: page, pageSize: limit } = PaginationProps;
+  let res = await getCommentByArticleId(route.params.id as string, page, limit);
+  commentData.value.push(...res.nodes);
+  PaginationProps.total = res.totalCount;
+  res.nodes = commentData.value;
+  return res;
+}).then(({ data, refresh }) => {
+  commentRefresh = refresh;
+  commentData.value = data.value.nodes;
+  PaginationProps.currentPage = Math.floor(
+    data.value.nodes.length / PaginationProps.pageSize
   );
-  commentData.value = comment;
-  PaginationProps.total = comment.totalCount;
+  PaginationProps.total = data.value.totalCount;
+});
+
+const handlePageChange = () => {
+  PaginationProps.currentPage = PaginationProps.currentPage + 1;
+  commentRefresh && commentRefresh();
 };
 
 const handleConfirm = async (
@@ -220,7 +220,7 @@ const handleConfirm = async (
     );
     reset();
   } finally {
-    refresh && refresh();
+    commentRefresh && commentRefresh();
   }
 };
 
@@ -238,7 +238,7 @@ const handleComment = async (form: EditForm, reset: () => void) => {
     );
     reset();
   } finally {
-    refresh && refresh();
+    commentRefresh && commentRefresh();
   }
 };
 
@@ -485,6 +485,29 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
   }
 }
 
+.loadMore {
+  padding: 1rem 0;
+  text-align: center;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  border-radius: 10px;
+  background: linear-gradient(var(--theme) 0 0) no-repeat;
+  background-size: var(--p, 0%);
+  background-position: calc(100% - var(--p, 0%));
+  transition: 0.4s, background-position 0s;
+  cursor: pointer;
+  &:hover {
+    --p: 100%;
+    color: var(--white);
+    border-color: var(--theme);
+  }
+  &.hide{
+    opacity: 0;
+    cursor: initial;
+    pointer-events: none;
+  }
+}
+
 @keyframes bg-animation {
   from {
     transform: scale(1);
@@ -522,6 +545,12 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
 <style lang="scss">
 @import "~~/assets/markdown.scss";
 .markdown-body {
+  &::before {
+    content: none;
+  }
+  &::after {
+    content: none;
+  }
   .highlight pre,
   pre {
     position: relative;

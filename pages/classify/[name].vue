@@ -74,7 +74,17 @@
       <ClassifyList :article-list="articleList" @article-click="articleClick" />
     </article>
     <nav class="pagination">
-      <Pagination v-bind="queryParams" />
+      <!-- <Pagination v-bind="queryParams" @page-change="pageChange" /> -->
+      <div
+        class="loadMore"
+        :class="{
+          hide:
+            queryParams.pageSize * queryParams.currentPage >= queryParams.total,
+        }"
+        @click="handlePageChange"
+      >
+        More
+      </div>
     </nav>
   </NuxtLayout>
 </template>
@@ -85,12 +95,14 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { getArticleList, getArticleTop, getType } from "~~/api";
-import { Article, Type } from "~~/types";
-
-definePageMeta({
-  keepalive: true,
-});
+import {
+  getArticleByTypeName,
+  getArticleList,
+  getArticleTop,
+  getType,
+  getTypeByName,
+} from "~~/api";
+import type { Article, Pagination, Type } from "~~/types";
 
 const route = useRoute();
 const router = useRouter();
@@ -99,7 +111,7 @@ const modules = [Navigation, SwiperPagination];
 const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 
 const queryParams = reactive({
-  pageSize: 10,
+  pageSize: 12,
   currentPage: 1,
   pageNumber: 0,
   total: 0,
@@ -109,11 +121,11 @@ const menuList = ref<Type[]>();
 const bannerArticleList = ref<Article[]>([]);
 
 useAsyncData(async () => {
-  let { nodes } = await getType();
-  nodes.unshift({
+  let nodes = await getTypeByName("Article");
+  nodes.childType.unshift({
     name: "All",
   });
-  return nodes;
+  return nodes.childType;
 }).then(({ data }) => {
   menuList.value = data.value;
 });
@@ -124,21 +136,33 @@ useAsyncData("articleBanner", () => getArticleTop()).then(({ data }) => {
 
 const articleList = ref<Article[]>([]);
 let articleListRefresh;
-useAsyncData(async () => {
-  const { pageSize: limit, currentPage } = queryParams;
-  if (currentClassify.value === "All") {
-    return await getArticleList(limit, currentPage);
-  }
-  return [];
-}).then(({ data, refresh }) => {
-  const { pageSize: limit, currentPage } = queryParams;
-  //@ts-ignore
-  queryParams.total = data.value.totalCount;
-  //@ts-ignore
-  queryParams.pageNumber = Math.ceil(data.value.totalCount / limit);
-  //@ts-ignore
-  articleList.value = data.value.nodes;
-  articleListRefresh = refresh;
+// useAsyncData(`article.type.${route.params.name as string}`, async () => {
+//   const { pageSize: limit, currentPage } = queryParams;
+//   if (currentClassify.value === "All") {
+//     return await getArticleList(limit, currentPage);
+//   }
+//   return await getArticleByTypeName(route.params.name as string, true);
+// }).then(({ data, refresh }) => {
+//   const { pageSize: limit, currentPage } = queryParams;
+//   queryParams.total = data.value.totalCount;
+//   queryParams.pageNumber = Math.ceil(data.value.totalCount / limit);
+//   articleList.value = data.value.nodes;
+//   articleListRefresh = refresh;
+// });
+
+onMounted(() => {
+  watchEffect(async () => {
+    const { pageSize: limit, currentPage } = queryParams;
+    let data: Pagination<Article>;
+    if (currentClassify.value === "All") {
+      data = await getArticleList(limit, currentPage);
+    } else {
+      data = await getArticleByTypeName(route.params.name as string, true);
+    }
+    queryParams.total = data.totalCount;
+    queryParams.pageNumber = Math.ceil(data.totalCount / limit);
+    articleList.value.push(...data.nodes)
+  });
 });
 
 const handleWheel = (event) => {
@@ -149,6 +173,9 @@ const menuClick = (menu: Type) => {
 };
 const articleClick = (article: Article) => {
   router.push(`/article/${article.id}`);
+};
+const handlePageChange = () => {
+  queryParams.currentPage = queryParams.currentPage + 1;
 };
 </script>
 
@@ -317,5 +344,27 @@ const articleClick = (article: Article) => {
 }
 .pagination {
   margin-top: 2rem;
+}
+.loadMore {
+  padding: 1rem 0;
+  text-align: center;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  border-radius: 10px;
+  background: linear-gradient(var(--theme) 0 0) no-repeat;
+  background-size: var(--p, 0%);
+  background-position: calc(100% - var(--p, 0%));
+  transition: 0.4s, background-position 0s;
+  cursor: pointer;
+  &:hover {
+    --p: 100%;
+    color: var(--white);
+    border-color: var(--theme);
+  }
+  &.hide {
+    opacity: 0;
+    cursor: initial;
+    pointer-events: none;
+  }
 }
 </style>

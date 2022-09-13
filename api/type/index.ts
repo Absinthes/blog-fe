@@ -12,6 +12,8 @@ export const getType = async (offset?: number, limit?: number) => {
           nodes {
             id
             name
+            nameEn
+            describe
             createTime
             rootType {
               id

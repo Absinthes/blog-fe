@@ -114,13 +114,23 @@ export const deleteComment = async (id: string) => {
   );
 };
 
-export const getCommentByArticleId = async (id: string,page:number,limit:number = 10) => {
+export const getCommentByArticleId = async (
+  id: string,
+  page: number,
+  limit: number = 10
+) => {
   const res = await query<{
     getCommentByArticleId: Pagination<Comment>;
   }>(
     gql`
-      query getCommnetByArticleId($ariticleId: String!,$pagination: PaginationQuerInput!) {
-        getCommentByArticleId(ariticleId: $ariticleId, pagination: $pagination) {
+      query getCommnetByArticleId(
+        $ariticleId: String!
+        $pagination: PaginationQuerInput!
+      ) {
+        getCommentByArticleId(
+          ariticleId: $ariticleId
+          pagination: $pagination
+        ) {
           nodes {
             id
             name
@@ -157,13 +167,13 @@ export const getCommentByArticleId = async (id: string,page:number,limit:number 
     `,
     {
       ariticleId: id,
-      pagination:{
-        offset:(page - 1) * limit,
-        limit
-      }
+      pagination: {
+        offset: (page - 1) * limit,
+        limit,
+      },
     },
     {
-      fetchPolicy:"network-only"
+      fetchPolicy: "network-only",
     }
   );
   return res.getCommentByArticleId;
