@@ -24,9 +24,14 @@
             <div class="swiper-item">
               <img class="swiper-bg" :src="IMG_ADDRESS + it.pic" alt="" />
               <article class="swiper-item-content">
-                <h1 @click="router.push(`/article/${it.id}`)">{{ it.title }}</h1>
+                <h1 @click="router.push(`/article/${it.id}`)">
+                  {{ it.title }}
+                </h1>
                 <p>
-                  <span class="detail" @click="router.push(`/article/${it.id}`)">
+                  <span
+                    class="detail"
+                    @click="router.push(`/article/${it.id}`)"
+                  >
                     {{ it.summary }}
                   </span>
                 </p>
@@ -42,7 +47,8 @@
         <div class="contetn-bar">
           <card hover-border-color="var(--theme)">
             <ContentBar
-              :items="contentNavData"
+              v-model:activeMenu="activeMenu"
+              :items="menuList"
               @on-more-click="handleMoreClick"
             />
           </card>
@@ -51,7 +57,7 @@
           <!-- <div class="post-item new" v-for="article in articleData"> -->
           <!-- <post-item ></post-item> -->
           <!-- </div> -->
-          <div class="post-item" v-for="article in articleData">
+          <div class="post-item" v-for="article in articleData" :key="article.id">
             <post-item
               :article="article"
               @article-click="router.push(`/article/${$event.id}`)"
@@ -79,8 +85,14 @@ import { RouteLocationRaw } from "vue-router";
 import ContentBar from "~~/components/contentBar.vue";
 import TagNav from "~~/components/home/tagNav.vue";
 import postItem from "~~/components/home/postItem.vue";
-import { getArticleList, getArticleTop, getGroupList } from "~~/api";
-import { Article, Group } from "~~/types";
+import {
+  getArticleByTypeName,
+  getArticleList,
+  getArticleTop,
+  getGroupList,
+  getTypeByName,
+} from "~~/api";
+import type { Article, Group, Type, Pagination } from "~~/types";
 import {
   Navigation,
   Pagination as SwiperPagination,
@@ -93,8 +105,8 @@ import "swiper/css/pagination";
 import "swiper/css/effect-cards";
 
 definePageMeta({
-  keepalive: true
-})
+  keepalive: true,
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -103,70 +115,6 @@ const paginationProps = reactive({
   currentPage: +route.query.page! || 1,
   total: 0,
 });
-const contentNavData = ref<
-  {
-    name: string;
-    to?: RouteLocationRaw;
-  }[]
->([
-  {
-    name: "首页",
-  },
-  {
-    name: "我的项目",
-  },
-  {
-    name: "经验分享",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-  {
-    name: "生活日常",
-  },
-]);
 const articleData = ref<Article[]>([]);
 const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 
@@ -174,25 +122,38 @@ const handleMoreClick = () => {
   console.log("更多");
 };
 
-let articleRefe;
+const menuList = ref<Type[]>([]);
+const activeMenu = ref<string>("All");
 
-useAsyncData("articleList", async () => {
-  let articleList = await getArticleList(
-    paginationProps.pageSize,
-    paginationProps.currentPage
-  );
-  articleData.value = articleList.nodes;
-  return articleList;
-}).then(({ data, refresh }) => {
-  articleRefe = refresh;
-  articleData.value = data.value.nodes;
-  paginationProps.total = data.value.totalCount;
+useAsyncData(async () => {
+  let nodes = await getTypeByName("Article");
+  nodes.childType.unshift({
+    name: "All",
+    nameEn: "All"
+  });
+  return nodes.childType;
+}).then(({ data }) => {
+  menuList.value = data.value;
+});
+
+
+onMounted(() => {
+  watchEffect(async () => {
+    const { pageSize: limit, currentPage } = paginationProps;
+    let data: Pagination<Article>;
+    if (activeMenu.value === "All") {
+      data = await getArticleList(limit, currentPage);
+    } else {
+      data = await getArticleByTypeName(activeMenu.value, true);
+    }
+    paginationProps.total = data.totalCount;
+    articleData.value = data.nodes;
+  });
 });
 
 const unWatch = watch(
   () => [paginationProps.pageSize, paginationProps.currentPage],
   async ([limit, page]) => {
-    articleRefe && (await articleRefe());
     router.push({
       query: {
         limit: limit,
@@ -247,11 +208,11 @@ useAsyncData("groupList-2", () => getGroupList(2, 0)).then(({ data }) => {
 
 .swiper-box {
   margin-bottom: 1rem;
-  & :deep(.swiper-button-prev){
+  & :deep(.swiper-button-prev) {
     color: inherit;
   }
 
-  & :deep(.swiper-button-next){
+  & :deep(.swiper-button-next) {
     color: inherit;
   }
 }

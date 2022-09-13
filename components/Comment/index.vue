@@ -1,6 +1,6 @@
 <template>
   <div class="comment">
-    <Card class="card" v-for="item in data">
+    <Card class="card" v-for="item in data" :key="item.id">
       <div class="main">
         <CommentItem
           :data="item"

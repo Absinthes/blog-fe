@@ -3,8 +3,11 @@
     <div class="content-bar-items" @wheel.prevent="handleWheel" ref="itemsRef">
       <div
         class="content-bar-item"
+        :class="{
+          active: item.nameEn === activeMenu || item.name === activeMenu
+        }"
         v-for="item in items"
-        @click="handleClick(item.to)"
+        @click="emit('update:activeMenu', item.nameEn)"
       >
         <span>
           {{ item.name }}
@@ -17,21 +20,16 @@
 
 <script setup lang="ts">
 import { RouteLocationRaw } from "vue-router";
+import { Type } from "~~/types";
 
-const router = useRouter();
-const handleClick = (to: RouteLocationRaw) => {
-  router.push(to);
-};
 const itemsRef = ref();
 const handleWheel = (event) => {
   itemsRef.value.scrollLeft += event.deltaY;
 };
 const props = withDefaults(
   defineProps<{
-    items: {
-      name: string;
-      to?: RouteLocationRaw;
-    }[];
+    items?: Type[];
+    activeMenu: string
   }>(),
   {
     items: [],
@@ -39,8 +37,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e:"onMoreClick"):void
-}>()
+  (e: "onMoreClick"): void;
+  (e: "update:activeMenu", name: string): void;
+}>();
 
 onMounted(() => {});
 </script>
@@ -60,9 +59,13 @@ onMounted(() => {});
     .content-bar-item {
       span {
         display: inline-block;
-        transition: background-color .3s,color .3s;
+        transition: background-color 0.3s, color 0.3s;
       }
       &:hover span {
+        background-color: var(--theme);
+        color: white;
+      }
+      &.active span{
         background-color: var(--theme);
         color: white;
       }
@@ -70,13 +73,18 @@ onMounted(() => {});
   }
 
   .content-bar-more {
+    padding: 5px 10px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 700;
     &:hover {
       color: var(--theme);
     }
   }
 
-  .content-bar-items .content-bar-item span,
-  .content-bar-more {
+  .content-bar-items .content-bar-item span {
     padding: 5px 10px;
     margin: 0 4px;
     cursor: pointer;
