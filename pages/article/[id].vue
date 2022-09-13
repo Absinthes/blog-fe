@@ -58,7 +58,7 @@
           <div class="meta-right"></div>
         </div>
       </header>
-      <Card>
+      <Card class="card">
         <div class="article-box">
           <div class="content-box">
             <div class="article-content">
@@ -118,7 +118,10 @@
               @handle-dian-zan="handleDianZan"
               :data="commentData.nodes"
             />
-            <Pagination v-bind="PaginationProps" @page-change="handlePageChange" />
+            <Pagination
+              v-bind="PaginationProps"
+              @page-change="handlePageChange"
+            />
           </div>
         </div>
       </Card>
@@ -153,7 +156,10 @@ const articleData = ref<Article>();
 const prevArticle = ref<Article>();
 const nextArticle = ref<Article>();
 const isNextGroup = ref(false);
-const commentData = ref<Pagination<Comment>>();
+const commentData = ref<Pagination<Comment>>({
+  nodes: [],
+  totalCount: 0,
+});
 let refresh: (opts?: RefreshOptions) => Promise<void>;
 const page = ref<number>(1);
 const PaginationProps = reactive({
@@ -169,28 +175,33 @@ let rootTag: number;
 useAsyncData(`article.${route.params.id}`, async () => {
   console.log("request");
   let article = await getArticleById(route.params.id as string);
-  const {currentPage:page,pageSize:limit} = PaginationProps
+  const { currentPage: page, pageSize: limit } = PaginationProps;
   let comment = await getCommentByArticleId(
     route.params.id as string,
     page,
     limit
   );
-  commentData.value = comment;
-  PaginationProps.total = comment.totalCount
-  console.log(comment.totalCount)
   return {
     article,
     comment,
   };
 }).then(({ data, refresh: rf }) => {
   articleData.value = data.value.article;
-  // commentData.value = data.value.comment;
+  commentData.value = data.value.comment;
+  PaginationProps.total = data.value.comment.totalCount;
   refresh = rf;
 });
 
-const handlePageChange = (p: number) => {
-  page.value = p;
-  refresh && refresh()
+const handlePageChange = async (p: number) => {
+  PaginationProps.currentPage = p;
+  const { pageSize: limit } = PaginationProps;
+  let comment = await getCommentByArticleId(
+    route.params.id as string,
+    p,
+    limit
+  );
+  commentData.value = comment;
+  PaginationProps.total = comment.totalCount;
 };
 
 const handleConfirm = async (
@@ -330,25 +341,38 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
     height: 100%;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: 50%;
+    transition: background 1.5s;
     z-index: -1;
-    animation: bg-animation 30s infinite alternate;
+    animation: bg-transition 1.5s backwards, bg-animation 30s 1.5s infinite alternate;
   }
   .article-title {
+    animation: opacity-transition 1.5s 0.5s backwards;
+    transition: opacity 1.5s;
     color: var(--white);
     letter-spacing: 0.1rem;
     font-size: 2.3rem;
     margin-bottom: 0.8rem;
+    text-shadow: 0 1px 10px rgb(0 0 0 / 30%);
+    font-family: "阿里妈妈数黑体";
   }
-  .tags-item {
-    margin-right: 1rem;
-    .sign {
-      margin-right: 5px;
+  .tags-box {
+    animation: opacity-transition 1.5s 1s backwards;
+    transition: opacity 1.5s;
+    text-shadow: 0 1px 10px rgb(0 0 0 / 30%);
+    .tags-item {
+      margin-right: 1rem;
+      .sign {
+        margin-right: 5px;
+      }
     }
   }
+
   .article-meta {
     display: flex;
     justify-content: space-between;
     margin: 3rem 0 0;
+    color: rgb(255 255 255 / 90%);
     .meta-left {
       display: flex;
       align-items: center;
@@ -358,6 +382,21 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
         border-radius: 1rem;
         backdrop-filter: blur(10px);
         overflow: hidden;
+        transition: opacity 1.5s,transform 1s;
+        text-shadow: 0 1px 10px rgb(0 0 0 / 30%);
+        box-shadow: var(--card-shadow);
+        &:nth-of-type(1){
+          animation: opacity-transition 1.5s 0.4s backwards,translateY-transition 1s 0.4s backwards;
+        }
+        &:nth-of-type(2){
+          animation: opacity-transition 1.5s 0.8s backwards,translateY-transition 1s 0.8s backwards;
+        }
+        &:nth-of-type(3){
+          animation: opacity-transition 1.5s 1.2s backwards,translateY-transition 1s 1.2s backwards;
+        }
+        &:nth-of-type(4){
+          animation: opacity-transition 1.5s 1.6s backwards,translateY-transition 1s 1.6s backwards;
+        }
         .title {
           font-size: 0.8rem;
           margin-bottom: 5px;
@@ -372,30 +411,37 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
     }
   }
 }
-.article-box {
-  padding: 3rem 1.5rem;
-  .comment-wrapper {
-    margin-top: 2rem;
-    padding: 0 0.8rem 0 2.2rem;
-    .hr {
-      display: flex;
-      text-align: center;
-      margin: 1rem 0;
-      i {
-        font-size: 1.5rem;
-        margin-right: 0.5rem;
+.card {
+  animation: opacity-transition 2s 0.5s backwards,translateY-transition 2s 0.5s backwards;
+  transition: opacity 2s,transform 2s;
+  .article-box {
+    animation: opacity-transition 1s 1.5s backwards;
+    transition: opacity 1s;
+    padding: 3rem 1.5rem;
+    .comment-wrapper {
+      margin-top: 2rem;
+      padding: 0 0.8rem 0 2.2rem;
+      .hr {
+        display: flex;
+        text-align: center;
+        margin: 1rem 0;
+        i {
+          font-size: 1.5rem;
+          margin-right: 0.5rem;
+        }
+        span {
+          font-size: 1.2rem;
+          font-weight: 500;
+        }
       }
-      span {
-        font-size: 1.2rem;
-        font-weight: 500;
+      .statistics {
+        font-size: 1.3rem;
+        font-weight: 700;
       }
-    }
-    .statistics {
-      font-size: 1.3rem;
-      font-weight: 700;
     }
   }
 }
+
 .content-box {
   position: relative;
   display: flex;
@@ -445,6 +491,30 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
   }
   to {
     transform: scale(1.2);
+  }
+}
+
+@keyframes bg-transition {
+  0% {
+    background-position-y: 0%;
+  }
+}
+
+@keyframes opacity-transition {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes translateY-transition{
+  0%{
+    transform: translateY(30px);
+  }
+  100%{
+    transform: translateY(0px);
   }
 }
 </style>

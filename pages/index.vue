@@ -93,7 +93,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-cards";
 
 definePageMeta({
-  keepalive: true
+  keepalive: true,
 })
 
 const route = useRoute();
@@ -202,10 +202,6 @@ const unWatch = watch(
   }
 );
 
-watch(route, () => {
-  console.log(route);
-  console.log(paginationProps);
-});
 
 const handlePageChange = (val: number) => {
   paginationProps.currentPage = val;

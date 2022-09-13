@@ -47,7 +47,6 @@
 
 <script setup lang="ts">
 import { getMarkdownIt } from "~~/utils/hook/useMarkdown";
-import md5 from "md5";
 import Iinput from "./Iinput.vue";
 import Emoji from "../emoji/index.vue";
 import { EditForm } from "~~/types";

@@ -85,11 +85,12 @@ onUnmounted(() => {
       align-items: center;
       width: 2rem;
       height: 2rem;
-      background-color: #006e90;
+      background-color: rgb(255 255 255 / 50%);
       color: white;
       border-radius: 50%;
       padding: 0.5rem;
       transition: transform 0.5s, background-color 0.3s;
+      backdrop-filter: saturate(1.8) blur(20px);
 
       &:hover {
         background-color: #f18f01;
@@ -114,8 +115,9 @@ onUnmounted(() => {
       height: 5rem;
       border-radius: 50%;
       text-align: center;
-      background-color: #006e90;
       overflow: hidden;
+      background-color: rgb(255 255 255 / 50%);
+      backdrop-filter: saturate(1.8) blur(20px);
       &::before {
         content: "";
         display: block;

@@ -6,7 +6,7 @@
   --card-border: #e3e8f7;
   --card-padding: 1rem 2rem;
   --card-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
-  --card-shadow-hover:0px 0px 12px rgba(0, 0, 0, 0.006);
+  --card-shadow-hover: 0px 0px 12px rgba(0, 0, 0, 0.006);
   --font-color: #12153d;
   --font-thin-color: #8a93a6;
   --font-thin-deep-color: #636472;
@@ -33,7 +33,7 @@
   --color-orange: 235 104 68;
   --selection-color: #fff;
   --selection-bg: #000;
-  --font-title: '阿里妈妈数黑体';
+  --font-title: "阿里妈妈数黑体";
 }
 
 body {
@@ -96,8 +96,23 @@ body[scroll]::-webkit-scrollbar-thumb,
     --p: 100%;
     color: var(--color-pink);
   }
-  &.active{
+  &.active {
     --p: 100%;
     color: var(--color-pink);
   }
+}
+
+.page-enter-active,.page-leave-active{
+  transition: opacity 1s;
+ }
+ .page-enter,.page-leave-active{
+  opacity: 0;
+ }
+
+
+ /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: "阿里妈妈数黑体 Bold";font-weight: 700;src: url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/MjgKOqvjtZe3Wlthr6xE0.woff2") format("woff2"),
+  url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/-l0snZ1IgVHAQ_W-Gq3Nh.woff") format("woff");
+  font-display: swap;
 }
