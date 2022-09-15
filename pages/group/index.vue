@@ -43,22 +43,29 @@ useAsyncData(() => {
 let oneFlag = ref(false);
 const baseRow = 8;
 
-const handlerImgLoad = async () => {
-  if (oneFlag.value) return;
-  await nextTick();
+const computedSpan = () => {
   try {
     const doms = document.querySelectorAll(".specialColumn");
     for (let i = 0; i < doms.length; i++) {
       const dom = doms[i];
       let articleLen = groupList.value[i].articles.length;
-      console.log(dom);
       dom.style.gridRowEnd = `span ${baseRow + 2 * articleLen}`;
     }
   } catch (error) {
-    debugger
+    debugger;
   }
+};
+
+const handlerImgLoad = async () => {
+  if (oneFlag.value) return;
+  await nextTick();
+  computedSpan();
   oneFlag.value = true;
 };
+
+onActivated(() => {
+  computedSpan()
+})
 </script>
 
 <style lang="scss" scoped>

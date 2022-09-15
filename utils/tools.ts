@@ -1,4 +1,4 @@
-import md5 from "md5"
+import md5 from "md5";
 
 export const getPictureUrl = computed(() => {
   return (url: string) => {
@@ -61,39 +61,84 @@ export function getBrowser() {
   }
 }
 
-export function browserRedirect(){
+export function browserRedirect() {
   //获取操作系统
   var sUserAgent = navigator.userAgent;
-  var isWin = (navigator.platform == "Win32") || (navigator.platform == "Windows");
-  var isMac = (navigator.platform == "Mac68K") || (navigator.platform == "MacPPC") || (navigator.platform == "Macintosh") || (navigator.platform == "MacIntel");
+  var isWin = navigator.platform == "Win32" || navigator.platform == "Windows";
+  var isMac =
+    navigator.platform == "Mac68K" ||
+    navigator.platform == "MacPPC" ||
+    navigator.platform == "Macintosh" ||
+    navigator.platform == "MacIntel";
   if (isMac) return "Mac";
-  var isUnix = (navigator.platform == "X11") && !isWin && !isMac;
+  var isUnix = navigator.platform == "X11" && !isWin && !isMac;
   if (isUnix) return "Unix";
-  var isLinux = (String(navigator.platform).indexOf("Linux") > -1);
+  var isLinux = String(navigator.platform).indexOf("Linux") > -1;
   if (isLinux) return "Linux";
   if (isWin) {
-      var isWin2K = sUserAgent.indexOf("Windows NT 5.0") > -1 || sUserAgent.indexOf("Windows 2000") > -1;
-      if (isWin2K) return "Windows 2000";
-      var isWinXP = sUserAgent.indexOf("Windows NT 5.1") > -1 || sUserAgent.indexOf("Windows XP") > -1;
-      if (isWinXP) return "Windows XP";
-      var isWin2003 = sUserAgent.indexOf("Windows NT 5.2") > -1 || sUserAgent.indexOf("Windows 2003") > -1;
-      if (isWin2003) return "Windows 2003";
-      var isWinVista= sUserAgent.indexOf("Windows NT 6.0") > -1 || sUserAgent.indexOf("Windows Vista") > -1;
-      if (isWinVista) return "Windows Vista";
-      var isWin7 = sUserAgent.indexOf("Windows NT 6.1") > -1 || sUserAgent.indexOf("Windows 7") > -1;
-      if (isWin7) return "Windows 7";
-      var isWin10 = sUserAgent.indexOf("Windows NT 10") > -1 || sUserAgent.indexOf("Windows 10") > -1;
-      if (isWin10) return "Windows 10";
+    var isWin2K =
+      sUserAgent.indexOf("Windows NT 5.0") > -1 ||
+      sUserAgent.indexOf("Windows 2000") > -1;
+    if (isWin2K) return "Windows 2000";
+    var isWinXP =
+      sUserAgent.indexOf("Windows NT 5.1") > -1 ||
+      sUserAgent.indexOf("Windows XP") > -1;
+    if (isWinXP) return "Windows XP";
+    var isWin2003 =
+      sUserAgent.indexOf("Windows NT 5.2") > -1 ||
+      sUserAgent.indexOf("Windows 2003") > -1;
+    if (isWin2003) return "Windows 2003";
+    var isWinVista =
+      sUserAgent.indexOf("Windows NT 6.0") > -1 ||
+      sUserAgent.indexOf("Windows Vista") > -1;
+    if (isWinVista) return "Windows Vista";
+    var isWin7 =
+      sUserAgent.indexOf("Windows NT 6.1") > -1 ||
+      sUserAgent.indexOf("Windows 7") > -1;
+    if (isWin7) return "Windows 7";
+    var isWin10 =
+      sUserAgent.indexOf("Windows NT 10") > -1 ||
+      sUserAgent.indexOf("Windows 10") > -1;
+    if (isWin10) return "Windows 10";
   }
   return "other";
 }
 
-export const getAvatar =  (() => {
+export const getAvatar = (() => {
   const defaultImage =
-  "https://upload-bbs.mihoyo.com/upload/2021/08/22/274927479/a95c5e1a2a1e63c3726f5baff45f349b_4982851866622051149.jpg?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,jpg";
+    "https://upload-bbs.mihoyo.com/upload/2021/08/22/274927479/a95c5e1a2a1e63c3726f5baff45f349b_4982851866622051149.jpg?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,jpg";
   let defaultImg = escape(defaultImage);
-  return (email:string) => {
+  return (email: string) => {
     const em = md5(email);
-    return  `https://cravatar.cn/avatar/${em}?d=${defaultImg}`;
+    return `https://cravatar.cn/avatar/${em}?d=${defaultImg}`;
+  };
+})();
+
+export const secTotime = (s: number, len: number = 3) => {
+  if (s < 0) return new Error("s < 0");
+  if(len < 2) return new Error('The length must be greater than or equal to 2')
+  let hour = Math.floor(s / 3600);
+  let min = Math.floor(s / 60) % 60;
+  let sec = s % 60;
+  let hourStr = "",
+    minStr = "",
+    secStr = "";
+  if (len == 3) {
+    if (hour < 10) {
+      hourStr = `0${hour}:`;
+    } else {
+      hourStr = `${hour}:`;
+    }
   }
-})()
+  if (len == 2) {
+    if (min < 10) {
+      minStr += "0";
+    }
+    minStr += `${min}:`;
+  }
+  if (sec < 10) {
+    secStr += "0";
+  }
+  secStr += sec;
+  return hourStr + minStr + secStr;
+};
