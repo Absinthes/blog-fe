@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       link: [
         {
           rel: "stylesheet",
-          href: "https://at.alicdn.com/t/c/font_3605429_343vx3xh2au.css",
+          href: "https://at.alicdn.com/t/c/font_3605429_dg1rgdv7o7.css",
         },
         {
           rel: "stylesheet",

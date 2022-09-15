@@ -1,3 +1,5 @@
+import { Article } from "./entity"
+
 export type Emoji = {
   [k in string]:{
     name:string,
@@ -13,4 +15,11 @@ export type EditForm = {
   link: string,
   name: string,
   content: string,
+}
+
+
+export type StatisticsArticle  = {
+  year:number
+  data?:Article[]
+  length?:number
 }

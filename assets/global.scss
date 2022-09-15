@@ -13,7 +13,7 @@
   --border-color: #eff0f8;
   /* --bg-color: #f5f9ff; */
   --bg-color: #fff;
-  --max-width: 1400px;
+  --max-width: 1600px;
   --xl-radius: 12px;
   --md-radius: 10px;
   --normal-radius: 8px;
@@ -102,12 +102,12 @@ body[scroll]::-webkit-scrollbar-thumb,
   }
 }
 
-.page-enter-active,.page-leave-active{
-  transition: opacity 1s;
- }
- .page-enter,.page-leave-active{
-  opacity: 0;
- }
+// .page-enter-active,.page-leave-active{
+//   transition: opacity 1s;
+//  }
+//  .page-enter,.page-leave-active{
+//   opacity: 0;
+//  }
 
 
  /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
@@ -115,4 +115,50 @@ body[scroll]::-webkit-scrollbar-thumb,
   font-family: "阿里妈妈数黑体 Bold";font-weight: 700;src: url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/MjgKOqvjtZe3Wlthr6xE0.woff2") format("woff2"),
   url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/-l0snZ1IgVHAQ_W-Gq3Nh.woff") format("woff");
   font-display: swap;
+}
+
+
+@keyframes opacity-transition {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes translateY-transition{
+  0%{
+    transform: translateY(30px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
+}
+
+@keyframes translateX-right {
+  0% {
+    transform: translateX(30px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes translateX-left {
+  0% {
+    transform: translateX(-30px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes translateY-top {
+  0% {
+    transform: translateY(-30px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

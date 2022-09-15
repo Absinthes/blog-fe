@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import { getArticleByTypeName, getTypeByName } from "~~/api";
 import { Article, Type } from "~~/types";
-import PostItem from "~~/components/home/postItem.vue";
+import PostItem from "~~/components/PostItems/postItem.vue";
 
 const router = useRouter();
 const route = useRoute();

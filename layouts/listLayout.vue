@@ -5,13 +5,16 @@
     </header>
 
     <main>
-      <div class="top">
-        <slot name="header"></slot>
-      </div>
-      <div class="content">
-        <slot></slot>
+      <div class="main-wrapper">
+        <div class="top">
+          <slot name="header"></slot>
+        </div>
+        <div class="content">
+          <slot></slot>
+        </div>
       </div>
       <aside>
+        <TagNav v-if="!slots.aside" />
         <slot name="aside"></slot>
       </aside>
     </main>
@@ -19,12 +22,13 @@
 </template>
 
 <script setup lang="ts">
-
+import TagNav from "~~/components/home/tagNav.vue";
+const slots = useSlots();
 </script>
 
 <style scoped lang="scss">
 #list-layout {
-  header{
+  header {
     height: var(--top-nav-height);
   }
   main {
@@ -35,11 +39,19 @@
     max-width: var(--max-width);
     width: var(--max-width);
     box-sizing: border-box;
-    .content {
+    .main-wrapper {
       width: 80%;
-      box-sizing: border-box;
-      padding-right: 0.5rem;
+      .content {
+        box-sizing: border-box;
+        padding-right: 0.5rem;
+      }
+
+      .top {
+        animation: opacity-transition 1.5s forwards, translateY-top 1.5s forwards;
+        transition: opacity 1.5s, transform 1.5s;
+      }
     }
+
     aside {
       width: 20%;
       box-sizing: border-box;

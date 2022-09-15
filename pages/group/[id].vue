@@ -1,9 +1,6 @@
 <template>
   <NuxtLayout name="list-layout">
-    <template #aside>
-      <TagNav />
-    </template>
-    <template #default v-if="group">
+    <template #header v-if="group">
       <nav class="nav-box">
         <div
           class="nav-bg"
@@ -38,16 +35,15 @@
           </div>
         </div>
       </nav>
+    </template>
+    <template #default v-if="group">
       <article class="content-box">
-        <div class="post-items">
-          <div class="post-item" v-for="article in group.articles">
-            <PostItem
-              :article="article"
-              @article-click="router.push(`/article/${$event.id}`)"
-              @tag-click="router.push(`/tags/${$event.name}`)"
-            />
-          </div>
-        </div>
+        <PostItems
+          :data="group.articles"
+          :style="{ height: '12rem' }"
+          @article-click="handleArticleClick"
+          @tag-click="handleTagClick"
+        ></PostItems>
       </article>
     </template>
   </NuxtLayout>
@@ -57,8 +53,8 @@
 import dayjs from "dayjs";
 import { getGroupById } from "~~/api";
 import TagNav from "~~/components/home/tagNav.vue";
-import { Group } from "~~/types";
-import PostItem from "~~/components/home/postItem.vue";
+import { Article, Group, Tag } from "~~/types";
+import PostItems from "~~/components/PostItems/index.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -69,6 +65,14 @@ const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 useAsyncData(`Group.${id}`, () => getGroupById(Number(id))).then(({ data }) => {
   group.value = data.value;
 });
+
+const handleArticleClick = (articlle: Article) => {
+  router.push(`/article/${articlle.id}`);
+};
+
+const handleTagClick = (tag: Tag) => {
+  router.push(`/tags/${tag.name}`);
+};
 </script>
 
 <style lang="scss" scoped>

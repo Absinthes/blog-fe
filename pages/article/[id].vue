@@ -523,14 +523,7 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
   }
 }
 
-@keyframes opacity-transition {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+
 
 @keyframes translateY-transition{
   0%{
