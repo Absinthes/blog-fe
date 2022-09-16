@@ -143,6 +143,10 @@ const handlerLoad = () => {
         font-size: 0.8rem;
         height: 2rem;
         line-height: 1rem;
+        cursor: default;
+        &:hover{
+          color: var(--theme);
+        }
       }
       .bottom {
         display: flex;

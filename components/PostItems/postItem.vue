@@ -21,6 +21,7 @@
           </div>
           <div class="time">
             <span v-if="dateMode === 'time'">
+              <i class="iconfont icon-icon"></i>
               {{ dayjs(+article.createTime).format("YYYY/MM/DD") }}
             </span>
             <span v-else>

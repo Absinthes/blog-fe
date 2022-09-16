@@ -1,29 +1,26 @@
 <template>
   <div class="tag-nav">
-    <card class="tag-nav-wrapper">
+    <card class="tag-nav-wrapper card">
       <div class="top">
         <div class="tag" v-for="tag in tags">
-          {{ tag.name }}
+          <NuxtLink :to="`/tags/${tag.name}`">
+            {{ tag.name }}
+          </NuxtLink>
           <span>5</span>
         </div>
       </div>
       <hr />
       <div class="center">
-        <div class="year-statistics">
-          <div class="year">2022</div>
-          <div class="number">76<span>篇</span></div>
-        </div>
-        <div class="year-statistics">
-          <div class="year">2022</div>
-          <div class="number">76<span>篇</span></div>
-        </div>
-        <div class="year-statistics">
-          <div class="year">2022</div>
-          <div class="number">76<span>篇</span></div>
-        </div>
-        <div class="year-statistics">
-          <div class="year">2022</div>
-          <div class="number">76<span>篇</span></div>
+        <div class="year-statistics" v-for="item in statisYearData">
+          <NuxtLink
+            :to="{
+              path: `/archives`,
+              hash: `#${item.year}`,
+            }"
+          >
+            <div class="year">{{ item.year }}</div>
+            <div class="number">{{ item.length }}<span>篇</span></div>
+          </NuxtLink>
         </div>
       </div>
       <hr />
@@ -51,31 +48,63 @@
         </div>
       </div>
     </card>
+    <card class="latest-article card">
+      <div class="icon">
+        <i class="iconfont icon-lishijilu_huaban"></i>
+        <span>最新文章</span>
+      </div>
+      <div class="item" v-for="article in latestArticle" :key="article.id">
+        <div class="pic">
+          <img :src="article.pic" alt="" />
+        </div>
+        <div class="information">
+          <div class="title">
+            <NuxtLink :to="`/article/${article.id}`" class="link">
+              {{ article.title }}
+            </NuxtLink>
+          </div>
+          <div class="time">
+            {{ dayjs(+article.createTime).format("YYYY-MM-DD") }}
+          </div>
+        </div>
+      </div>
+    </card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getAllTag_hone } from "~~/api";
-import { Tag } from "~~/types";
+import { getAllTag_hone, getArticleList } from "~~/api";
+import { statisticsArticleByYear } from "~~/api/statistics";
+import type { Article, StatisticsArticle, Tag } from "~~/types";
+import dayjs from "dayjs";
 const tags = ref<Tag[]>([]);
+const statisYearData = ref<StatisticsArticle[]>([]);
+const latestArticle = ref<Article[]>([]);
 
-const getTags = async () => {
-  const { data } = await useAsyncData("all_tags", () => getAllTag_hone());
+useAsyncData(() => getAllTag_hone()).then(({ data }) => {
   tags.value = data.value;
-};
+});
 
-const getData = async () => {
-  getTags();
-};
+useAsyncData(() => statisticsArticleByYear()).then(({ data }) => {
+  statisYearData.value = data.value;
+});
 
-getData()
+useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
+  latestArticle.value = data.value.nodes;
+});
 </script>
 
 <style lang="scss" scoped>
 .tag-nav {
   position: sticky;
   top: 70px;
+  .card {
+    margin-bottom: 1rem;
+  }
   .tag-nav-wrapper {
+    animation: opacity-transition 2s forwards,translateX-right 2s forwards;
+    transition: opacity 2s,transform 2s;
+    opacity: 0;
     padding: 1rem;
     .top {
       display: flex;
@@ -111,7 +140,6 @@ getData()
     .center {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-around;
       .year-statistics {
         cursor: pointer;
         border: 1px solid var(--border-color);
@@ -158,6 +186,86 @@ getData()
           }
         }
       }
+    }
+  }
+  .latest-article {
+    position: relative;
+    padding: 1rem;
+    animation: opacity-transition 2s 0.5s forwards,translateX-right 2s 0.5s forwards;
+    transition: opacity 2s,transform 2s;
+    opacity: 0;
+    .icon {
+      display: flex;
+      align-items: end;
+      margin-bottom: 1rem;
+      .icon-lishijilu_huaban {
+        font-size: 1.5rem;
+      }
+      span {
+        font-size: 1.3rem;
+        font-family: "阿里妈妈数黑体";
+      }
+    }
+    .item {
+      margin: 0.7rem 0;
+      display: flex;
+      .pic {
+        width: 4.2rem;
+        height: 4.2rem;
+        border-radius: 10px;
+        overflow: hidden;
+        flex: 0 0 25%;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s;
+        }
+      }
+      .information {
+        margin-left: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding-bottom: 0.5rem;
+        width: 75%;
+        .title {
+          flex: 1;
+          .link {
+            overflow-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          &:hover {
+            color: var(--theme);
+          }
+        }
+        .time {
+          font-size: 0.8rem;
+          color: rgba($color: #000, $alpha: 0.4);
+        }
+      }
+
+      &:hover {
+        .pic {
+          img {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes translateX-right {
+    0% {
+      transform: translateX(30px);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
 }

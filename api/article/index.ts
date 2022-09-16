@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import _ from "lodash";
 import { query, mutation } from "../request";
 
-export async function getArticleList(limit: number = 10, page: number = 0) {
+export async function getArticleList(limit: number = 10, page: number = 1) {
   let res = await query<{ getArticleList: Pagination<Article> }>(
     gql`
       query getArticleList($limit: Int!, $offset: Int!) {

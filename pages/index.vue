@@ -1,11 +1,6 @@
 <template>
   <NuxtLayout name="list-layout">
-    <template #aside>
-      <div class="aside">
-        <TagNav />
-      </div>
-    </template>
-    <template #default>
+    <template #header>
       <nav class="swiper-box">
         <swiper
           class="swiper"
@@ -43,7 +38,9 @@
       <div class="groupList-box">
         <GroupItem v-for="group in groupList" :group="group" :len="5" />
       </div>
-      <div class="default">
+    </template>
+    <template #default>
+      <div class="default" style="">
         <div class="contetn-bar">
           <card hover-border-color="var(--theme)">
             <ContentBar
@@ -53,19 +50,12 @@
             />
           </card>
         </div>
-        <div class="post-items">
-          <!-- <div class="post-item new" v-for="article in articleData"> -->
-          <!-- <post-item ></post-item> -->
-          <!-- </div> -->
-          <div class="post-item" v-for="article in articleData" :key="article.id">
-            <post-item
-              :article="article"
-              @article-click="router.push(`/article/${$event.id}`)"
-              @tag-click="router.push(`/tags/${$event.name}`)"
-            >
-            </post-item>
-          </div>
-        </div>
+        <PostItems
+          :data="articleData"
+          :style="{ height: '12rem' }"
+          @article-click="handleArticleClick"
+          @tag-click="handleTagClick"
+        ></PostItems>
         <nav id="pagination">
           <Pagination
             v-bind="paginationProps"
@@ -81,10 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { RouteLocationRaw } from "vue-router";
 import ContentBar from "~~/components/contentBar.vue";
-import TagNav from "~~/components/home/tagNav.vue";
-import postItem from "~~/components/home/postItem.vue";
 import {
   getArticleByTypeName,
   getArticleList,
@@ -92,17 +79,19 @@ import {
   getGroupList,
   getTypeByName,
 } from "~~/api";
-import type { Article, Group, Type, Pagination } from "~~/types";
+import type { Article, Group, Type, Pagination, Tag } from "~~/types";
 import {
   Navigation,
   Pagination as SwiperPagination,
   EffectCards,
+  Autoplay,
 } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-cards";
+import PostItems from "~~/components/PostItems/index.vue";
 
 definePageMeta({
   keepalive: true,
@@ -129,13 +118,12 @@ useAsyncData(async () => {
   let nodes = await getTypeByName("Article");
   nodes.childType.unshift({
     name: "All",
-    nameEn: "All"
+    nameEn: "All",
   });
   return nodes.childType;
 }).then(({ data }) => {
   menuList.value = data.value;
 });
-
 
 onMounted(() => {
   watchEffect(async () => {
@@ -163,12 +151,11 @@ const unWatch = watch(
   }
 );
 
-
 const handlePageChange = (val: number) => {
   paginationProps.currentPage = val;
 };
 
-const modules = [Navigation, SwiperPagination, EffectCards];
+const modules = [Navigation, SwiperPagination, EffectCards, Autoplay];
 const bannerArticleList = ref<Article[]>([]);
 useAsyncData("articleBanner", () => getArticleTop()).then(({ data }) => {
   bannerArticleList.value = data.value;
@@ -178,6 +165,14 @@ const groupList = ref<Group[]>([]);
 useAsyncData("groupList-2", () => getGroupList(2, 0)).then(({ data }) => {
   groupList.value = data.value.nodes;
 });
+
+const handleArticleClick = (articlle:Article) => {
+  router.push(`/article/${articlle.id}`)
+}
+
+const handleTagClick = (tag:Tag) => {
+  router.push(`/tags/${tag.name}`)
+}
 </script>
 
 <style scoped lang="scss">
@@ -185,20 +180,6 @@ useAsyncData("groupList-2", () => getGroupList(2, 0)).then(({ data }) => {
   .content-bar {
     width: 100%;
     display: flex;
-  }
-  .post-items {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    margin-top: 0.5rem;
-    grid-column-gap: 1rem;
-    .new {
-      grid-column-start: 1;
-      grid-column-end: 3;
-    }
-    .post-item {
-      height: 12rem;
-      margin-bottom: 1rem;
-    }
   }
 }
 
@@ -267,11 +248,6 @@ useAsyncData("groupList-2", () => getGroupList(2, 0)).then(({ data }) => {
       }
     }
   }
-}
-.aside {
-  width: 100%;
-  height: 100%;
-  padding-left: 0.5rem;
 }
 #pagination {
   margin-top: 1rem;

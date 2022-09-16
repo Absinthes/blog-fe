@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout>
+  <NuxtLayout name="list-layout">
     <div class="groupList-box">
       <GroupItem
         class="specialColumn"

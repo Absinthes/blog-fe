@@ -146,3 +146,12 @@ export type FriendsChianType = {
   name?:string
   friendsChains?:FriendsChain[]
 }
+
+export type StatisticsArticleByMonth = {
+  year: number;
+  data?: {
+    month?: number;
+    data?: Article[];
+  }[];
+  length?: number;
+};
