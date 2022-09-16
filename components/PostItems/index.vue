@@ -1,21 +1,17 @@
 <template>
   <div class="post-items">
-    <div
-      class="post-item"
+    <EnterGroup
       v-for="(article,i) in data"
       :key="article.id"
-      :style="{
-        ...style,
-        'animation':`opacity-transition 1.5s ${i * duration}s forwards,
-    translateY-transition 1.5s ${i * duration}s forwards`
-      }"
+      :style="style"
+      :i="i"
     >
-      <PostItem
-        :article="article"
+      <PostItem 
+        :data="article"
         @article-click="emit('articleClick', $event)"
         @tag-click="emit('tagClick', $event)"
       ></PostItem>
-    </div>
+    </EnterGroup>
   </div>
 </template>
 
@@ -23,6 +19,7 @@
 import { StyleValue } from "vue";
 import { Article, Tag } from "~~/types";
 import PostItem from "./postItem.vue";
+import EnterGroup from "./enterGroup.vue";
 const props = withDefaults(
   defineProps<{
     size?: number;
@@ -33,7 +30,7 @@ const props = withDefaults(
   {
     size: 2,
     data: [],
-    duration:0.3
+    duration:0.3,
   }
 );
 
@@ -43,6 +40,7 @@ const emit = defineEmits<{
 }>();
 </script>
 
+
 <style scoped lang="scss">
 .post-items {
   display: grid;
@@ -51,17 +49,6 @@ const emit = defineEmits<{
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
 }
-.post-item {
-  opacity:0;
-  transition: opacity 1.5s, transform 1.5s;
-}
 
-@keyframes translateY-top {
-  0% {
-    transform: translateY(-30px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
+
 </style>

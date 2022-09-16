@@ -54,7 +54,7 @@ const handleTagClick = (tag: Tag) => {
 <style lang="scss" scoped>
 .container {
   header {
-    animation: opacity-transition 1.5s forwards, translateX-left 1.5s forwards;
+    animation: opacity-transition 1.5s forwards, translate-left 1.5s forwards;
     transition: opacity 1.5s, transform 1.5s;
     h2 {
       font-family: "阿里妈妈数黑体";
@@ -76,7 +76,7 @@ const handleTagClick = (tag: Tag) => {
     h5 {
       position: sticky;
       top: 5rem;
-      animation: opacity-transition 1.5s forwards, translateX-left 1.5s forwards;
+      animation: opacity-transition 1.5s forwards, translate-left 1.5s forwards;
       transition: opacity 1.5s, transform 1.5s;
     }
     ul {
@@ -94,7 +94,7 @@ const handleTagClick = (tag: Tag) => {
           top: 0;
           width: 2px;
           animation: opacity-transition 1.5s forwards,
-            translateX-left 1.5s forwards;
+            translate-left 1.5s forwards;
           transition: opacity 1.5s, transform 1.5s;
           z-index: -1;
         }
@@ -110,7 +110,7 @@ const handleTagClick = (tag: Tag) => {
           margin-right: 1rem;
           margin-top: 0rem;
           animation: opacity-transition 1s forwards,
-            translateX-left 1.5s forwards;
+            translate-left 1.5s forwards;
           transition: opacity 1s, transform 1.5s;
         }
       }

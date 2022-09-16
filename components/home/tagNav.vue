@@ -102,7 +102,7 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
     margin-bottom: 1rem;
   }
   .tag-nav-wrapper {
-    animation: opacity-transition 2s forwards,translateX-right 2s forwards;
+    animation: opacity-transition 2s forwards,translate-right 2s forwards;
     transition: opacity 2s,transform 2s;
     opacity: 0;
     padding: 1rem;
@@ -191,7 +191,7 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
   .latest-article {
     position: relative;
     padding: 1rem;
-    animation: opacity-transition 2s 0.5s forwards,translateX-right 2s 0.5s forwards;
+    animation: opacity-transition 2s 0.5s forwards,translate-right 2s 0.5s forwards;
     transition: opacity 2s,transform 2s;
     opacity: 0;
     .icon {
@@ -260,7 +260,7 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
     }
   }
 
-  @keyframes translateX-right {
+  @keyframes translate-right {
     0% {
       transform: translateX(30px);
     }

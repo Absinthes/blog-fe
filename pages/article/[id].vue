@@ -386,16 +386,16 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
         text-shadow: 0 1px 10px rgb(0 0 0 / 30%);
         box-shadow: var(--card-shadow);
         &:nth-of-type(1){
-          animation: opacity-transition 1.5s 0.4s backwards,translateY-transition 1s 0.4s backwards;
+          animation: opacity-transition 1.5s 0.4s backwards,translate-bottom 1s 0.4s backwards;
         }
         &:nth-of-type(2){
-          animation: opacity-transition 1.5s 0.8s backwards,translateY-transition 1s 0.8s backwards;
+          animation: opacity-transition 1.5s 0.8s backwards,translate-bottom 1s 0.8s backwards;
         }
         &:nth-of-type(3){
-          animation: opacity-transition 1.5s 1.2s backwards,translateY-transition 1s 1.2s backwards;
+          animation: opacity-transition 1.5s 1.2s backwards,translate-bottom 1s 1.2s backwards;
         }
         &:nth-of-type(4){
-          animation: opacity-transition 1.5s 1.6s backwards,translateY-transition 1s 1.6s backwards;
+          animation: opacity-transition 1.5s 1.6s backwards,translate-bottom 1s 1.6s backwards;
         }
         .title {
           font-size: 0.8rem;
@@ -412,7 +412,7 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
   }
 }
 .card {
-  animation: opacity-transition 2s 0.5s backwards,translateY-transition 2s 0.5s backwards;
+  animation: opacity-transition 2s 0.5s backwards,translate-bottom 2s 0.5s backwards;
   transition: opacity 2s,transform 2s;
   .article-box {
     animation: opacity-transition 1s 1.5s backwards;
@@ -525,7 +525,7 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
 
 
 
-@keyframes translateY-transition{
+@keyframes translate-bottom{
   0%{
     transform: translateY(30px);
   }
