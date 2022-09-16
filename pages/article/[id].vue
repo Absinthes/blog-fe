@@ -167,7 +167,7 @@ const commentData = ref<Comment[]>([]);
 let commentRefresh: (opts?: RefreshOptions) => Promise<void>;
 const PaginationProps = reactive({
   total: 0,
-  pageSize: 1,
+  pageSize: 5,
   currentPage: 1,
 });
 

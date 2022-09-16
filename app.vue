@@ -1,6 +1,7 @@
 <template>
   <NuxtPage />
   <BackToTop />
+  <MusicWidget />
 </template>
 
 <script setup lang="ts">

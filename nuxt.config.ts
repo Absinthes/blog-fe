@@ -17,14 +17,7 @@ export default defineNuxtConfig({
         },
       ],
     },
-  },
-  // css: [
-  //   "normalize.css/normalize.css",
-  //   "@/assets/global.css",
-  //   "@/assets/index.css",
-  // ],
-  vite: {
-   
+    
   },
   css: ['normalize.css/normalize.css', '@/assets/global.scss'],
 })
