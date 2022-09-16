@@ -33,12 +33,12 @@
       <i
         class="iconfont icon-bofangqi-bofang"
         v-if="!wavesurfer.isPlay.value"
-        @click="playPause"
+        @click="wavesurfer.playPause"
       ></i>
       <i
         class="iconfont icon-bofangqi-zanting"
         v-else
-        @click.stop="playPause"
+        @click.stop="wavesurfer.playPause"
       ></i>
       <i class="iconfont icon-bofangqi-xiayiji" @click="wavesurfer.next"></i>
       <i
@@ -66,15 +66,27 @@ import { secTotime } from "~~/utils/tools";
 import { WaveSurferControll } from "~~/utils/WaveSurfer";
 
 type MusicMode = "sidebar";
-const isHide = ref(false);
+const isHide = ref(true);
 const waveform = ref();
 const precent = ref(50);
 const silentMode = ref(false);
 const wavesurfer = new WaveSurferControll("#b1bacd", "#4a5cc3", 3, 3, 70);
 const volumeRef = ref();
 
-onMounted(async () => {
-  getMusicList();
+onMounted(() => {
+  wavesurfer.init(waveform.value);
+});
+
+const getMusicList = async () => {
+  wavesurfer.addMusic("/public/黄龄,HOYO-MiX - TruE.mp3");
+  wavesurfer.start();
+};
+
+const isHideWatch = watch(isHide, (newVal) => {
+  if (!newVal) {
+    getMusicList();
+  }
+  isHideWatch();
 });
 
 watch(precent, (newVal) => {
@@ -95,18 +107,6 @@ const setModeIconClass = computed(() => {
       return "icon-suijibofang";
   }
 });
-
-const getMusicList = async () => {
-  await wavesurfer.init(waveform.value);
-  setTimeout(() => {
-    wavesurfer.addMusic("/public/黄龄,HOYO-MiX - TruE.mp3");
-    wavesurfer.start();
-  }, 500);
-};
-
-const playPause = () => {
-  wavesurfer.playPause();
-};
 
 const volumeClick = (e: Event) => {
   if (e.target === volumeRef.value) {
@@ -251,8 +251,8 @@ const volumeClick = (e: Event) => {
       transition: all 0.3s;
     }
     .music-info {
-      width: 200px;
-      height: calc(200px - 1rem);
+      width: calc(200px + 1.3rem);
+      height: 200px;
       white-space: nowrap;
       overflow: hidden;
       transform: rotate(-90deg);
@@ -265,24 +265,26 @@ const volumeClick = (e: Event) => {
         font-size: 0.8rem;
       }
       p {
+        display: none;
         font-size: 0.7rem;
       }
       .time {
         display: none;
       }
     }
-    .wave-box{
+    .wave-box {
       opacity: 0;
       height: 0;
       overflow: hidden;
+      margin-top: 0;
     }
   }
 
-  .control-box{
+  .control-box {
     width: 3rem;
     white-space: initial;
     // transition: width 0.3s;
-    .iconfont{
+    .iconfont {
       height: 45px;
       line-height: 45px;
     }
@@ -298,12 +300,12 @@ const volumeClick = (e: Event) => {
   }
 }
 
-@keyframes opcityAndWidthChange{
-  to{
+@keyframes opcityAndWidthChange {
+  to {
     opacity: 0;
     height: 110px;
   }
-  from{
+  from {
     opacity: 1;
     height: 0;
   }
