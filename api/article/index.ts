@@ -1,7 +1,6 @@
 import { Article, ArticleUpdateInput } from "@/types";
 import { Pagination, StatusModel } from "@/types/common";
 import gql from "graphql-tag";
-import _ from "lodash";
 import { query, mutation } from "../request";
 
 export async function getArticleList(limit: number = 10, page: number = 1) {

@@ -4,11 +4,18 @@
       <i class="iconfont icon-gengduo" @click="isHide = !isHide"></i>
     </header>
     <article class="music-content">
-      <img class="music-img" src="/public/微信图片_20220908160732.jpg" alt="" />
+      <img
+        class="music-img"
+        :src="wavesurfer.getCoverImg.value"
+        alt=""
+        :style="{
+          animationPlayState: wavesurfer.isPlay.value ? 'running' : 'paused',
+        }"
+      />
       <div class="music-info">
-        <h3 class="title">黄龄,HOYO-MiX - TruE</h3>
-        <p class="author">Podcast</p>
-        <p class="time">5 month ago</p>
+        <h3 class="title">{{ wavesurfer.getTitle.value }}</h3>
+        <p class="author">{{ wavesurfer.getAuthor.value }}</p>
+        <p class="time">{{ wavesurfer.getCreateTime.value }}</p>
       </div>
       <div class="wave-box">
         <div class="music-time">
@@ -29,7 +36,10 @@
         style="font-size: 1.1rem"
         @click="wavesurfer.modeChange"
       ></i>
-      <i class="iconfont icon-bofangqi-xiayiji reverse"></i>
+      <i
+        class="iconfont icon-bofangqi-xiayiji reverse"
+        @click="wavesurfer.prev"
+      ></i>
       <i
         class="iconfont icon-bofangqi-bofang"
         v-if="!wavesurfer.isPlay.value"
@@ -62,8 +72,9 @@
 </template>
 
 <script lang="ts" setup>
+import { getMultimediaList } from "~~/api";
 import { secTotime } from "~~/utils/tools";
-import { WaveSurferControll } from "~~/utils/WaveSurfer";
+import { MusicListItem, WaveSurferControll } from "~~/utils/WaveSurfer";
 
 type MusicMode = "sidebar";
 const isHide = ref(true);
@@ -72,22 +83,58 @@ const precent = ref(50);
 const silentMode = ref(false);
 const wavesurfer = new WaveSurferControll("#b1bacd", "#4a5cc3", 3, 3, 70);
 const volumeRef = ref();
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
+const queryParams = reactive({
+  limit: 10,
+  currentPage: 1,
+});
+const multimediaList = ref<MusicListItem[]>([]);
 
-onMounted(() => {
-  wavesurfer.init(waveform.value);
+useAsyncData(`MusicWidget`, async () => {
+  const { limit, currentPage } = queryParams;
+  const { nodes, totalCount } = await getMultimediaList(
+    limit,
+    limit * (currentPage - 1),
+    "Music"
+  );
+  return nodes.map((it) => ({
+    title: it.title,
+    author: it.author,
+    url: IMG_ADDRESS + it.path,
+    coverUrl: IMG_ADDRESS + it.cover,
+    createTime: it.createTime,
+  }));
+}).then(({ data }) => {
+  multimediaList.value = data.value;
+  wavesurfer.addMusic(multimediaList.value);
 });
 
-const getMusicList = async () => {
-  wavesurfer.addMusic("/public/黄龄,HOYO-MiX - TruE.mp3");
+const musicStart = () => {
   wavesurfer.start();
 };
 
-const isHideWatch = watch(isHide, (newVal) => {
-  if (!newVal) {
-    getMusicList();
-  }
-  isHideWatch();
+onMounted(async () => {
+  await wavesurfer.init(waveform.value);
+  musicStart();
 });
+
+// const getMusicList = async () => {
+//   const { limit, currentPage } = queryParams;
+//   const { nodes, totalCount } = await getMultimediaList(
+//     limit,
+//     limit * (currentPage - 1),
+//     "Music"
+//   );
+//   multimediaList.value = nodes.map((it) => ({
+//     title: it.title,
+//     author: it.author,
+//     url: IMG_ADDRESS + it.path,
+//     coverUrl: IMG_ADDRESS + it.cover,
+//     createTime: it.createTime,
+//   }));
+//   wavesurfer.addMusic(multimediaList.value);
+//   musicStart();
+// };
 
 watch(precent, (newVal) => {
   wavesurfer.volumeSet(newVal / 100);
@@ -124,21 +171,27 @@ const volumeClick = (e: Event) => {
   padding: 1rem 1.5rem 1.5rem;
   width: 250px;
   height: 570px;
-  box-shadow: var(--card-shadow);
   border-radius: 10px;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
   background-color: var(--card-bg);
   overflow: hidden;
-  transition: width 0.3s, padding 0.3s;
+  transition: width 0.3s, padding 0.3s, transform 0.3s;
   z-index: 999;
+  animation: initalAnimation 2s alternate;
 
   .music-content {
-    margin-top: 1.5rem;
     overflow: hidden;
+    text-align: center;
     .music-img {
-      width: 250px;
-      height: 250px;
+      display: inline-block;
+      width: 230px;
+      height: 230px;
+      margin-top: 1.5rem;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 50%;
+      animation: imgAnimation 30s infinite alternate;
+      box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.4);
+      transition: width 0.3s, height 0.3s;
     }
     .music-info {
       text-align: center;
@@ -157,9 +210,12 @@ const volumeClick = (e: Event) => {
         margin-top: 0;
       }
       .author {
+        font-size: 0.9rem;
         font-weight: 500;
       }
       .time {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
         color: var(--font-thin-deep-color);
       }
     }
@@ -239,16 +295,19 @@ const volumeClick = (e: Event) => {
 
 .musicWidget-box.hide {
   width: 3rem;
-  padding: 1rem;
+  padding: 1rem 0.7rem;
   overflow: hidden;
+  transform: translateX(-90%);
+  &:hover {
+    transform: translateX(0);
+  }
   .music-header {
     text-align: center;
   }
   .music-content {
     .music-img {
-      width: 3rem;
-      height: 3rem;
-      transition: all 0.3s;
+      width: 2.5rem;
+      height: 2.5rem;
     }
     .music-info {
       width: calc(200px + 1.3rem);
@@ -271,11 +330,15 @@ const volumeClick = (e: Event) => {
       .time {
         display: none;
       }
+      .author {
+        display: inline-block;
+        margin-left: 1rem;
+      }
     }
     .wave-box {
       opacity: 0;
       height: 0;
-      overflow: hidden;
+      // overflow: hidden;
       margin-top: 0;
     }
   }
@@ -308,6 +371,31 @@ const volumeClick = (e: Event) => {
   from {
     opacity: 1;
     height: 0;
+  }
+}
+
+@keyframes imgAnimation {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes initalAnimation {
+  0% {
+    opacity: 0;
+    transform: translateX(-90%);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-90%);
   }
 }
 </style>

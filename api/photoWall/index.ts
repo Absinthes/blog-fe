@@ -1,7 +1,6 @@
 import { CreateOrUpdatePhotoInput, PhotoWall } from "@/types";
 import { Pagination, StatusModel } from "@/types/common";
 import gql from "graphql-tag";
-import _ from "lodash";
 import { mutation, query } from "../request";
 
 export async function getPhotoWallList(limit: number = 10, offset: number = 0) {

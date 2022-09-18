@@ -186,6 +186,7 @@ const handlePageChange = () => {
   color: var(--font-color);
   border-top: 2px solid var(--border-color);
   border-bottom: 2px solid var(--border-color);
+  animation: translateY-top 1s;
   &::after {
     content: "Articles";
     position: absolute;
@@ -270,6 +271,7 @@ const handlePageChange = () => {
   height: 400px;
   overflow: hidden;
   border-radius: 2.5rem;
+  animation: translateX-left 1s;
   .swiper {
     position: relative;
     height: 100%;

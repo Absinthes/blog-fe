@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import _ from "lodash";
+import  _  from "lodash";
 type MenuItem = {
   title: string;
   url: string;
@@ -198,7 +198,7 @@ const handlerClick = (it: MenuItem) => {
     margin: 0 22px;
     border-radius: var(--normal-radius);
     transition: color 0.3s ease-in-out;
-    &::after{
+    &::after {
       content: "";
       display: block;
       position: absolute;
@@ -213,7 +213,7 @@ const handlerClick = (it: MenuItem) => {
     }
     &:hover {
       color: var(--theme);
-      &::after{
+      &::after {
         --p: 100%;
       }
     }

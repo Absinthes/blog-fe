@@ -3,7 +3,11 @@
     <div class="groupList-box">
       <GroupItem
         class="specialColumn"
-        v-for="it in groupList"
+        :style="{
+          animation: `opacity-transition 1.5s ${i * duration}s forwards,
+    translateY-transition 1.5s ${i * duration}s forwards`,
+        }"
+        v-for="(it, i) in groupList"
         :group="it"
         :len="5"
         ref="groupListRefs"
@@ -21,6 +25,7 @@ definePageMeta({
   keepalive: true,
 });
 
+const duration = 0.2
 const title = useNavTitle();
 title.value = "专栏";
 const groupList = ref<Group[]>();
@@ -51,9 +56,7 @@ const computedSpan = () => {
       let articleLen = groupList.value[i].articles.length;
       dom.style.gridRowEnd = `span ${baseRow + 2 * articleLen}`;
     }
-  } catch (error) {
-    debugger;
-  }
+  } catch (error) {}
 };
 
 const handlerImgLoad = async () => {
@@ -64,8 +67,8 @@ const handlerImgLoad = async () => {
 };
 
 onActivated(() => {
-  computedSpan()
-})
+  computedSpan();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -76,6 +79,7 @@ onActivated(() => {
   row-gap: 1rem;
   .specialColumn {
     grid-row-start: auto;
+    opacity: 0;
   }
 }
 </style>

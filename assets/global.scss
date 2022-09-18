@@ -162,3 +162,12 @@ body[scroll]::-webkit-scrollbar-thumb,
     transform: translateY(0);
   }
 }
+
+@keyframes translateY-bottom {
+  0% {
+    transform: translateY(30px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

@@ -6,7 +6,8 @@
           <aside class="tags-box">
             <div
               class="tags-item"
-              v-for="it in tagList"
+              v-for="(it, i) in tagList" 
+              :key="it.id"
               @click="tagClick(it)"
               :class="{ active: currentTag?.name == it?.name }"
             >
@@ -43,6 +44,7 @@ definePageMeta({
   keepalive: false,
 });
 
+const duration = 0.3
 const route = useRoute();
 const router = useRouter();
 const queryParams = reactive({

@@ -55,7 +55,7 @@
       </div>
       <div class="item" v-for="article in latestArticle" :key="article.id">
         <div class="pic">
-          <img :src="article.pic" alt="" />
+          <img :src="IMG_ADDRESS + article.pic" alt="" />
         </div>
         <div class="information">
           <div class="title">
@@ -80,6 +80,7 @@ import dayjs from "dayjs";
 const tags = ref<Tag[]>([]);
 const statisYearData = ref<StatisticsArticle[]>([]);
 const latestArticle = ref<Article[]>([]);
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 
 useAsyncData(() => getAllTag_hone()).then(({ data }) => {
   tags.value = data.value;
@@ -102,8 +103,8 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
     margin-bottom: 1rem;
   }
   .tag-nav-wrapper {
-    animation: opacity-transition 2s forwards,translateX-right 2s forwards;
-    transition: opacity 2s,transform 2s;
+    animation: opacity-transition 2s forwards, translateX-right 2s forwards;
+    transition: opacity 2s, transform 2s;
     opacity: 0;
     padding: 1rem;
     .top {
@@ -191,12 +192,13 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
   .latest-article {
     position: relative;
     padding: 1rem;
-    animation: opacity-transition 2s 0.5s forwards,translateX-right 2s 0.5s forwards;
-    transition: opacity 2s,transform 2s;
+    animation: opacity-transition 2s 0.5s forwards,
+      translateX-right 2s 0.5s forwards;
+    transition: opacity 2s, transform 2s;
     opacity: 0;
     .icon {
       display: flex;
-      align-items: end;
+      align-items: flex-end;
       margin-bottom: 1rem;
       .icon-lishijilu_huaban {
         font-size: 1.5rem;

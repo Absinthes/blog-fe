@@ -1,5 +1,5 @@
 <template>
-  <div class="post-items">
+  <div class="post-items" :style="{'grid-template-columns': `repeat(${size}, 1fr)`}">
     <div
       class="post-item"
       v-for="(article,i) in data"
@@ -14,6 +14,7 @@
         :article="article"
         @article-click="emit('articleClick', $event)"
         @tag-click="emit('tagClick', $event)"
+        :date-mode="dateMode"
       ></PostItem>
     </div>
   </div>
@@ -27,13 +28,15 @@ const props = withDefaults(
   defineProps<{
     size?: number;
     style: StyleValue;
-    data: Article[];
-    duration?:number
+    data?: Article[];
+    duration?:number;
+    dateMode?: "time" | "text"
   }>(),
   {
     size: 2,
     data: [],
-    duration:0.3
+    duration:0.3,
+    dateMode: "time"
   }
 );
 
@@ -46,7 +49,7 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .post-items {
   display: grid;
-  grid-template-columns: repeat(v-bind(size), 1fr);
+  // grid-template-columns: repeat(v-bind(size), 1fr);
   margin-top: 0.5rem;
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;

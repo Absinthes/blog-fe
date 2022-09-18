@@ -1,7 +1,6 @@
 import { Group, GroupCreateInput, GroupUpdateInput } from "@/types";
 import { Pagination, StatusModel } from "@/types/common";
 import gql from "graphql-tag";
-import _ from "lodash";
 import { query, mutation } from "../request";
 
 export async function getGroupList(limit: number = 10, offset: number = 0) {
