@@ -36,7 +36,7 @@
         </swiper>
       </nav>
       <div class="groupList-box">
-        <EnterGroup v-for="(group,i) in groupList" :i="i" :duration="1.5" direction="top">
+        <EnterGroup v-for="(group,i) in groupList" :i="i" direction="top">
           <GroupItem :group="group" :len="5" />
         </EnterGroup>
       </div>

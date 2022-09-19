@@ -12,7 +12,7 @@
     "@types/lodash": "^4.14.184",
     "cross-env": "^7.0.3",
     "graphql": "^16.6.0",
-    "nuxt": "3.0.0-rc.8",
+    "nuxt": "^3.0.0-rc.10",
     "sass": "^1.54.5"
   },
   "dependencies": {

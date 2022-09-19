@@ -90,7 +90,6 @@ const handlerLoad = () => {
 <style lang="scss" scoped>
 .card {
   width: 100%;
-  height: 100%;
   border-radius: 12px;
   box-shadow: 0 8px 16px -4px rgb(44 45 48 / 5%);
   background-color: white;

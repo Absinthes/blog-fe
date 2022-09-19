@@ -55,7 +55,7 @@
       </div>
       <div class="item" v-for="article in latestArticle" :key="article.id">
         <div class="pic">
-          <img :src="article.pic" alt="" />
+          <img :src="baseUrl +  article.pic" alt="" />
         </div>
         <div class="information">
           <div class="title">
@@ -77,9 +77,12 @@ import { getAllTag_hone, getArticleList } from "~~/api";
 import { statisticsArticleByYear } from "~~/api/statistics";
 import type { Article, StatisticsArticle, Tag } from "~~/types";
 import dayjs from "dayjs";
+
 const tags = ref<Tag[]>([]);
 const statisYearData = ref<StatisticsArticle[]>([]);
 const latestArticle = ref<Article[]>([]);
+const baseUrl = import.meta.env.VITE_BASE_IMG_ADDRESS
+
 
 useAsyncData(() => getAllTag_hone()).then(({ data }) => {
   tags.value = data.value;
@@ -102,8 +105,8 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
     margin-bottom: 1rem;
   }
   .tag-nav-wrapper {
-    animation: opacity-transition 2s forwards,translate-right 2s forwards;
-    transition: opacity 2s,transform 2s;
+    animation: opacity-transition 1.5s forwards,translate-right 1.5s forwards;
+    transition: opacity 1.5s,transform 1.5s;
     opacity: 0;
     padding: 1rem;
     .top {
@@ -191,8 +194,8 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
   .latest-article {
     position: relative;
     padding: 1rem;
-    animation: opacity-transition 2s 0.5s forwards,translate-right 2s 0.5s forwards;
-    transition: opacity 2s,transform 2s;
+    animation: opacity-transition 1.5s 0.5s forwards,translate-right 1.5s 0.5s forwards;
+    transition: opacity 1.5s,transform 1.5s;
     opacity: 0;
     .icon {
       display: flex;
@@ -203,7 +206,7 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
       }
       span {
         font-size: 1.3rem;
-        font-family: "阿里妈妈数黑体";
+        font-family: "阿里妈妈数黑体",Microsoft YaHei;
       }
     }
     .item {

@@ -5,6 +5,8 @@
       :key="article.id"
       :style="style"
       :i="i"
+      :delay="delay"
+      :duration="duration"
     >
       <PostItem 
         :data="article"
@@ -26,11 +28,13 @@ const props = withDefaults(
     style: StyleValue;
     data: Article[];
     duration?:number
+    delay?:number
   }>(),
   {
     size: 2,
     data: [],
-    duration:0.3,
+    duration:0.8,
+    delay:0.2
   }
 );
 

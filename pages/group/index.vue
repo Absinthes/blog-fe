@@ -1,20 +1,22 @@
 <template>
   <NuxtLayout name="list-layout">
     <div class="groupList-box">
+      <EnterGroup :i="i" v-for="(it, i) in groupList" :key="it.id">
       <GroupItem
         class="specialColumn"
-        v-for="it in groupList"
         :group="it"
         :len="5"
         ref="groupListRefs"
         @img-onload="handlerImgLoad"
       />
+      </EnterGroup>
     </div>
   </NuxtLayout>
 </template>
 
 <script lang="ts" setup>
 import { getGroupList } from "~~/api";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue";
 import { Group } from "~~/types";
 
 definePageMeta({
@@ -64,8 +66,8 @@ const handlerImgLoad = async () => {
 };
 
 onActivated(() => {
-  computedSpan()
-})
+  computedSpan();
+});
 </script>
 
 <style lang="scss" scoped>

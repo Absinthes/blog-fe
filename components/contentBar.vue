@@ -1,6 +1,6 @@
 <template>
   <div id="content-bar">
-    <div class="content-bar-items" @wheel.prevent="handleWheel" ref="itemsRef">
+    <div class="content-bar-items" @wheel.prevent.passive ="handleWheel" ref="itemsRef">
       <div
         class="content-bar-item"
         :class="{

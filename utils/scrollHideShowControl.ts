@@ -20,7 +20,10 @@ export const scrollHideShowControl = (
   const unListener = () => {
     dom.removeEventListener("scroll", listenerFunc);
   };
-  dom.addEventListener("scroll", listenerFunc, false);
+  dom.addEventListener("scroll", listenerFunc, {
+    capture:false,
+    passive:true
+  });
 
   return unListener;
 };

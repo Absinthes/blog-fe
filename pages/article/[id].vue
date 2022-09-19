@@ -354,7 +354,7 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
     font-size: 2.3rem;
     margin-bottom: 0.8rem;
     text-shadow: 0 1px 10px rgb(0 0 0 / 30%);
-    font-family: "阿里妈妈数黑体";
+    font-family: "阿里妈妈数黑体",Microsoft YaHei;
   }
   .tags-box {
     animation: opacity-transition 1.5s 1s backwards;
@@ -382,20 +382,20 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
         border-radius: 1rem;
         backdrop-filter: blur(10px);
         overflow: hidden;
-        transition: opacity 1.5s,transform 1s;
+        transition: opacity 1s,transform 1s;
         text-shadow: 0 1px 10px rgb(0 0 0 / 30%);
         box-shadow: var(--card-shadow);
         &:nth-of-type(1){
-          animation: opacity-transition 1.5s 0.4s backwards,translate-bottom 1s 0.4s backwards;
+          animation: opacity-transition 1s 0.4s backwards,translate-bottom 1s 0.4s backwards;
         }
         &:nth-of-type(2){
-          animation: opacity-transition 1.5s 0.8s backwards,translate-bottom 1s 0.8s backwards;
+          animation: opacity-transition 1s 0.8s backwards,translate-bottom 1s 0.8s backwards;
         }
         &:nth-of-type(3){
-          animation: opacity-transition 1.5s 1.2s backwards,translate-bottom 1s 1.2s backwards;
+          animation: opacity-transition 1s 1.2s backwards,translate-bottom 1s 1.2s backwards;
         }
         &:nth-of-type(4){
-          animation: opacity-transition 1.5s 1.6s backwards,translate-bottom 1s 1.6s backwards;
+          animation: opacity-transition 1s 1.6s backwards,translate-bottom 1s 1.6s backwards;
         }
         .title {
           font-size: 0.8rem;
@@ -412,8 +412,8 @@ const hrefClick = (e: Event, directory: mdDirectory) => {
   }
 }
 .card {
-  animation: opacity-transition 2s 0.5s backwards,translate-bottom 2s 0.5s backwards;
-  transition: opacity 2s,transform 2s;
+  animation: opacity-transition 1.5s 1s backwards,translate-bottom 1.5s 1s backwards;
+  transition: opacity 1.5s,transform 1.5s;
   .article-box {
     animation: opacity-transition 1s 1.5s backwards;
     transition: opacity 1s;

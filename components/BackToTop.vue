@@ -56,7 +56,7 @@ onMounted(() => {
     let result = Math.floor((scrollH.value / validH) * 100);
     percent.value = result > 100 ? 100 : result;
   };
-  window.addEventListener("scroll", computedPercent);
+  window.addEventListener("scroll", computedPercent,{passive:true});
 });
 
 onUnmounted(() => {

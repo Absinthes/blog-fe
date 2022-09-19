@@ -125,7 +125,10 @@ const handlerScroll = (e: Event) => {
 };
 const throttleHandleScroll = _.throttle(handlerScroll, 300);
 onMounted(() => {
-  window.addEventListener("scroll", throttleHandleScroll, false);
+  window.addEventListener("scroll", throttleHandleScroll, {
+    capture:false,
+    passive:true
+  });
 });
 
 const backTop = () => {

@@ -24,7 +24,7 @@ const props = withDefaults(
   }>(),
   {
     delay:0.3,
-    duration:1.5,
+    duration:0.8,
     style:{},
     direction:"bottom"
   }
@@ -34,6 +34,6 @@ const props = withDefaults(
 <style scoped lang="scss">
 .group-item {
   opacity: 0;
-  transition: opacity 1.5s, transform 1.5s;
+  transition: opacity v-bind(duration)s, transform v-bind(duration)s;
 }
 </style>

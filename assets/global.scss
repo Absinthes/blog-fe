@@ -33,7 +33,7 @@
   --color-orange: 235 104 68;
   --selection-color: #fff;
   --selection-bg: #000;
-  --font-title: "阿里妈妈数黑体";
+  --font-title: "阿里妈妈数黑体",Microsoft YaHei;
 }
 
 body {
@@ -109,14 +109,16 @@ body[scroll]::-webkit-scrollbar-thumb,
 //   opacity: 0;
 //  }
 
-
- /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: "阿里妈妈数黑体 Bold";font-weight: 700;src: url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/MjgKOqvjtZe3Wlthr6xE0.woff2") format("woff2"),
-  url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/-l0snZ1IgVHAQ_W-Gq3Nh.woff") format("woff");
+  font-family: "阿里妈妈数黑体 Bold";
+  font-weight: 700;
+  src: url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/MjgKOqvjtZe3Wlthr6xE0.woff2")
+      format("woff2"),
+    url("//at.alicdn.com/wf/webfont/602dbcxVCTAj/-l0snZ1IgVHAQ_W-Gq3Nh.woff")
+      format("woff");
   font-display: swap;
 }
-
 
 @keyframes opacity-transition {
   0% {

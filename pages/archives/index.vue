@@ -19,6 +19,7 @@
                 :data="i.data"
                 :style="{ height: '12rem' }"
                 :size="3"
+                :duration="1"
                 @article-click="handleArticleClick"
                 @tag-click="handleTagClick"
               ></PostItems>
@@ -57,7 +58,7 @@ const handleTagClick = (tag: Tag) => {
     animation: opacity-transition 1.5s forwards, translate-left 1.5s forwards;
     transition: opacity 1.5s, transform 1.5s;
     h2 {
-      font-family: "阿里妈妈数黑体";
+      font-family: "阿里妈妈数黑体",Microsoft YaHei;
     }
   }
   article {
