@@ -33,10 +33,7 @@ const props = withDefaults(
     size: 2,
     data: [],
     duration:0.3,
-<<<<<<< HEAD
     dateMode: "time"
-=======
->>>>>>> 2d68d9389bfcc1b511bf2f3f43a6784e48c68b7a
   }
 );
 
