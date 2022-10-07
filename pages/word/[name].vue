@@ -2,9 +2,9 @@
   <NuxtLayout>
     <nav class="nav-box">
       <div class="nav-left">
-        <h1>{{currentType?.name}}</h1>
+        <h1>{{ currentType?.name }}</h1>
         <p>
-          {{currentType?.describe}}
+          {{ currentType?.describe }}
         </p>
       </div>
       <div class="nav-right">
@@ -20,7 +20,14 @@
       </div>
     </nav>
     <article class="articleList-box">
-      <div class="post-item" v-for="article in articleList">
+      <PostItems
+        :style="{ height: '12rem' }"
+        :data="articleList"
+        @article-click="router.push(`/article/${$event.id}`)"
+        @tag-click="router.push(`/tags/${$event.name}`)"
+        :size="2"
+      />
+      <!-- <div class="post-item" v-for="article in articleList" >
         <PostItem
           :article="article"
           :date-mode="'text'"
@@ -28,7 +35,7 @@
           @tag-click="router.push(`/tags/${$event.name}`)"
         >
         </PostItem>
-      </div>
+      </div> -->
     </article>
   </NuxtLayout>
 </template>
@@ -81,6 +88,7 @@ useAsyncData(`type.article.${route.params.name}`, async () => {
   justify-content: space-between;
   align-items: flex-end;
   .nav-left {
+    animation: translateX-left 1s;
     h1 {
       color: var(--color-red);
     }
@@ -93,6 +101,7 @@ useAsyncData(`type.article.${route.params.name}`, async () => {
   }
   .nav-right {
     font-size: 0.9rem;
+    animation: translateX-right 1s;
     .typeList-box {
       margin-right: -1rem;
       .type-item {
@@ -105,14 +114,6 @@ useAsyncData(`type.article.${route.params.name}`, async () => {
 }
 
 .articleList-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  margin-top: 0.5rem;
-  grid-column-gap: 1rem;
-  margin-top: 2rem;
-  .post-item {
-    height: 12rem;
-    margin-bottom: 1rem;
-  }
+  margin-top: 1.5rem;
 }
 </style>

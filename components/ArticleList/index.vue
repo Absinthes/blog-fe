@@ -7,7 +7,14 @@
       <div v-for="(it, key) in filterArticle" class="article-group-box">
         <p class="time">{{ key }}</p>
         <div class="article-box">
-          <div v-for="article in it" class="article-item">
+          <div
+            v-for="(article, i) in it"
+            class="article-item"
+            :style="{
+              animation: `opacity-transition 1.5s ${i * duration}s forwards,
+    translateY-bottom 1.5s ${i * duration}s forwards`,
+            }"
+          >
             <img
               :src="imgAddress + article.pic"
               @click="emits('articleClick', article)"
@@ -50,9 +57,11 @@ const props = withDefaults(
     title: string;
     articleList: Article[];
     imgAddress?: string;
+    duration?: number;
   }>(),
   {
     imgAddress: import.meta.env.VITE_BASE_IMG_ADDRESS as string,
+    duration: 0.3,
   }
 );
 
@@ -77,11 +86,15 @@ const filterArticle = computed(() => {
 
 <style lang="scss" scoped>
 .content {
+  .tag-name{
+    animation: translateY-bottom 1s;
+  }
   .article-box {
     .article-group-box {
       margin: 5px 0;
       .time {
         color: #c3c3c3;
+        animation: translateY-bottom 1s;
       }
       .article-item {
         display: flex;

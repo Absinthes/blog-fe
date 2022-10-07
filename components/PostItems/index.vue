@@ -1,5 +1,5 @@
 <template>
-  <div class="post-items">
+  <div class="post-items" :style="{'grid-template-columns': `repeat(${size}, 1fr)`}">
     <EnterGroup
       v-for="(article,i) in data"
       :key="article.id"
@@ -12,6 +12,7 @@
         :data="article"
         @article-click="emit('articleClick', $event)"
         @tag-click="emit('tagClick', $event)"
+        :date-mode="dateMode"
       ></PostItem>
     </EnterGroup>
   </div>
@@ -26,15 +27,17 @@ const props = withDefaults(
   defineProps<{
     size?: number;
     style: StyleValue;
-    data: Article[];
-    duration?:number
+    data?: Article[];
+    duration?:number;
+    dateMode?: "time" | "text"
     delay?:number
   }>(),
   {
     size: 2,
     data: [],
     duration:0.8,
-    delay:0.2
+    delay:0.2,
+    dateMode: "time"
   }
 );
 
@@ -48,7 +51,7 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .post-items {
   display: grid;
-  grid-template-columns: repeat(v-bind(size), 1fr);
+  // grid-template-columns: repeat(v-bind(size), 1fr);
   margin-top: 0.5rem;
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;

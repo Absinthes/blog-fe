@@ -1,7 +1,14 @@
 import MarkdownIt from "markdown-it";
-import hljs from "highlight.js";
+import hljs from "highlight.js/lib/core";
+import javascript from 'highlight.js/lib/languages/javascript';
+import css from 'highlight.js/lib/languages/css';
+import html from 'highlight.js/lib/languages/vbscript-html';
 import anchor from "markdown-it-anchor";
 import Token from "markdown-it/lib/token";
+
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('html', html);
 
 export type mdDirectory = {
   id: string;

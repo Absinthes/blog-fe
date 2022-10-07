@@ -155,3 +155,18 @@ export type StatisticsArticleByMonth = {
   }[];
   length?: number;
 };
+
+export type Multimedia = {
+  id?: string;
+  title?: string;
+  author?: string;
+  path?: string;
+  cover?: string;
+  format?: string;
+  outerLink?: string;
+  weight?: number;
+  createTime?: string;
+  updateTime?: string;
+  tags?: Tag[];
+  type?: Type;
+};

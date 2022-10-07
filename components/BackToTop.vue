@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import _ from "lodash";
 const percent = ref(0);
 const percentStyle = computed(() => {
   return `translate(-50%,${37 - percent.value * 0.7}%)`;

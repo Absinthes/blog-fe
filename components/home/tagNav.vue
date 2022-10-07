@@ -55,7 +55,7 @@
       </div>
       <div class="item" v-for="article in latestArticle" :key="article.id">
         <div class="pic">
-          <img :src="baseUrl +  article.pic" alt="" />
+          <img :src="IMG_ADDRESS + article.pic" alt="" />
         </div>
         <div class="information">
           <div class="title">
@@ -81,8 +81,7 @@ import dayjs from "dayjs";
 const tags = ref<Tag[]>([]);
 const statisYearData = ref<StatisticsArticle[]>([]);
 const latestArticle = ref<Article[]>([]);
-const baseUrl = import.meta.env.VITE_BASE_IMG_ADDRESS
-
+const IMG_ADDRESS = import.meta.env.VITE_BASE_IMG_ADDRESS;
 
 useAsyncData(() => getAllTag_hone()).then(({ data }) => {
   tags.value = data.value;
@@ -199,7 +198,7 @@ useAsyncData(() => getArticleList(5, 1)).then(({ data }) => {
     opacity: 0;
     .icon {
       display: flex;
-      align-items: end;
+      align-items: flex-end;
       margin-bottom: 1rem;
       .icon-lishijilu_huaban {
         font-size: 1.5rem;
