@@ -1,19 +1,19 @@
 <template>
   <card hover-border-color="var(--theme)">
     <div class="post">
-      <div class="left" @click="emits('articleClick', article)">
-        <img :src="imgAddress + article.pic" alt="" />
+      <div class="left" @click="emits('articleClick', data)">
+        <img :src="imgAddress + data.pic" alt="" />
       </div>
       <div class="right">
-        <div class="title" @click="emits('articleClick', article)">
-          <h3>{{ article.title }}</h3>
+        <div class="title" @click="emits('articleClick', data)">
+          <h3>{{ data.title }}</h3>
         </div>
-        <p class="ellipsis-2 summary">{{ article.summary }}</p>
+        <p class="ellipsis-2 summary">{{ data.summary }}</p>
         <div class="meta">
           <div class="tags" ref="tagsRef" @wheel.prevent="handleWheel">
             <div
               class="tag"
-              v-for="tag in article.tags"
+              v-for="tag in data.tags"
               @click.stop="emits('tagClick', tag)"
             >
               <span>#</span>{{ tag.name }}
@@ -22,11 +22,11 @@
           <div class="time">
             <span v-if="dateMode === 'time'">
               <i class="iconfont icon-icon"></i>
-              {{ dayjs(+article.createTime).format("YYYY/MM/DD") }}
+              {{ dayjs(+data.createTime).format("YYYY/MM/DD") }}
             </span>
             <span v-else>
               {{
-                dayjs(+article.createTime)
+                dayjs(+data.createTime)
                   .fromNow()
                   .replace(/\s/g, "")
               }}
@@ -48,9 +48,9 @@ dayjs.extend(relativeTime);
 
 type DateMode = "time" | "text";
 
-const { article } = withDefaults(
+const props = withDefaults(
   defineProps<{
-    article: Article;
+    data: Article;
     imgAddress?: string;
     dateMode?: DateMode;
   }>(),

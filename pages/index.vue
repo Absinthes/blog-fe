@@ -36,7 +36,9 @@
         </swiper>
       </nav>
       <div class="groupList-box">
-        <GroupItem v-for="group in groupList" :group="group" :len="5" />
+        <EnterGroup v-for="(group,i) in groupList" :i="i" :duration="1.5" direction="top">
+          <GroupItem :group="group" :len="5" />
+        </EnterGroup>
       </div>
     </template>
     <template #default>
@@ -92,6 +94,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-cards";
 import PostItems from "~~/components/PostItems/index.vue";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue"
 
 definePageMeta({
   keepalive: true,

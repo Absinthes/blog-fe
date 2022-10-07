@@ -47,7 +47,7 @@ const slots = useSlots();
       }
 
       .top {
-        animation: opacity-transition 1.5s forwards, translateY-top 1.5s forwards;
+        animation: opacity-transition 1.5s forwards, translate-top 1.5s forwards;
         transition: opacity 1.5s, transform 1.5s;
       }
     }
