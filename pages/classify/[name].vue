@@ -17,14 +17,18 @@
             <input type="text" placeholder="Search..." />
           </div>
           <div class="menu-box" @wheel.prevent="handleWheel" ref="menuBox">
-            <div
+            <EnterGroup
               class="menu-item"
-              v-for="menu in menuList"
+              v-for="(menu, i) in menuList"
+              :i="i"
+              :duration="1"
+              :delay="0.1"
+              direction="right"
               :class="{ active: currentClassify === menu.name }"
               @click="menuClick(menu)"
             >
               {{ menu.name }}
-            </div>
+            </EnterGroup>
           </div>
         </div>
       </div>
@@ -103,6 +107,7 @@ import {
   getTypeByName,
 } from "~~/api";
 import type { Article, Pagination, Type } from "~~/types";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue"
 
 const route = useRoute();
 const router = useRouter();
@@ -205,6 +210,7 @@ const handlePageChange = () => {
     border: 2px solid var(--border-color);
     padding: 3rem 3rem;
     clip-path: inset(2.3rem 0);
+    animation: opacity-transition 1s forwards, translate-top 1s forwards;
   }
 }
 .hint-box {
@@ -276,6 +282,7 @@ const handlePageChange = () => {
     position: relative;
     height: 100%;
     color: var(--font-color);
+    animation: opacity-transition 1s forwards, translate-top 1s forwards;
     &:deep(.swiper-pagination-bullet) {
       border: 1px solid var(--font-color);
       background-color: transparent;

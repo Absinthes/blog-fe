@@ -5,10 +5,13 @@
       gridTemplateColumns: getCardWidth,
     }"
   >
-    <transition-group name="classify-item">
-      <article
+    <!-- <transition-group name="classify-item"> -->
+      <EnterGroup
         class="classify-item"
-        v-for="article in articleList"
+        v-for="(article, i) in articleList"
+        :i="i"
+        :duration="1"
+        :delay="0.1"
         :key="article.id"
       >
         <div class="img-box">
@@ -54,14 +57,15 @@
             Read More
           </button>
         </div>
-      </article>
-    </transition-group>
+      </EnterGroup>
+    <!-- </transition-group> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Article } from "~~/types";
 import dayjs from "dayjs";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue"
 
 const props = withDefaults(
   defineProps<{

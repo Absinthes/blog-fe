@@ -168,6 +168,7 @@ export class WaveSurferControll {
   load(i: number) {
     if (!this.instantiation) return;
     this.instantiation.load(this.musicAddressList.value[i].url);
+    this.currentMusicIndex.value = i
   }
 
   addListener() {

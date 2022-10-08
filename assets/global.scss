@@ -36,6 +36,10 @@
   --font-title: "阿里妈妈数黑体";
 }
 
+.color-red{
+  color: var(--color-red);
+}
+
 body {
   font: 400 1rem MiSans, PingFang SC, Microsoft YaHei, sans-serif;
   overflow: overlay;
@@ -69,6 +73,90 @@ body[scroll]::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.7);
   transition: 0s;
+}
+
+.flex{
+  display: flex;
+}
+
+.justify-between{
+  justify-content: space-between;
+}
+
+.justify-around{
+  justify-content: space-around;
+}
+
+.align-center{
+  align-items: center;
+}
+
+.align-start{
+  align-items: flex-start;
+}
+
+.align-end{
+  align-items: flex-end;
+}
+
+.flex-column {
+	flex-direction: column;
+}
+
+.overflowHidden {
+	overflow: hidden;
+}
+
+.object-cover {
+	object-fit: cover;
+}
+
+.object-contain {
+	object-fit: contain;
+}
+
+.h-full {
+	height: 100%;
+}
+
+.w-full {
+	width: 100%;
+}
+
+.rounded-max {
+	border-radius: 1000rpx;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.text-white{
+	color: #fff;
+}
+
+.relative{
+	position: relative;
+}
+
+.inline-block{
+	display: inline-block;
+}
+
+.inline-flex{
+	display: inline-flex;
+}
+
+.block{
+	display: block;
+}
+
+.nowrap{
+	white-space: nowrap;
+}
+
+.bg-white{
+	background-color: white;
 }
 
 .ellipsis-3 {

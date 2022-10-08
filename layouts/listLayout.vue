@@ -43,7 +43,7 @@ const slots = useSlots();
       width: 80%;
       .content {
         box-sizing: border-box;
-        padding-right: 0.5rem;
+        // padding-right: 0.5rem;
       }
 
       .top {

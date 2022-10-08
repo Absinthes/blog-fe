@@ -1,29 +1,30 @@
 <template>
   <NuxtLayout>
     <article class="tag-box">
-      <NuxtLink
-        class="tag-item"
-        :to="`/tags/${it.name}`"
-        v-for="it in tagList"
-        :key="it.id"
-      >
-        <span class="tag-punctuation">#</span>
-        {{ it.name }}
-        <span class="tag-total">{{ it.articles.length }}</span>
-      </NuxtLink>
+      <EnterGroup v-for="(it, i) in tagList" :key="it.id" :i="i" :delay="0.1" :duration="1" direction="right">
+        <NuxtLink class="tag-item" :to="`/tags/${it.name}`">
+          <span class="tag-punctuation">#</span>
+          {{ it.name }}
+          <span class="tag-total">{{ it.articles.length }}</span>
+        </NuxtLink>
+      </EnterGroup>
     </article>
-  </NuxtLayout>  
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import { getAllTag } from "~~/api";
+import { getAllTag, getAllTag_hone } from "~~/api";
 import { Tag } from "~~/types";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue";
 
 const tagList = ref<Tag[]>([]);
 
 const getData = async () => {
-  const { data: res } = await useAsyncData(async () => await getAllTag("Article"));
-  console.log(res.value)
+  const { data: res } = await useAsyncData(
+    'allTag',
+    async () => await getAllTag_hone()
+  );
+  console.log(res.value);
   tagList.value = res.value;
 };
 getData();

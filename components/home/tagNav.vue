@@ -6,7 +6,7 @@
           <NuxtLink :to="`/tags/${tag.name}`">
             {{ tag.name }}
           </NuxtLink>
-          <span>5</span>
+          <span>{{tag.articles.length}}</span>
         </div>
       </div>
       <hr />

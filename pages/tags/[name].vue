@@ -4,9 +4,13 @@
       <Card style="margin-right: 1rem">
         <div class="tag">
           <aside class="tags-box">
-            <div
+            <EnterGroup
               class="tags-item"
-              v-for="(it, i) in tagList" 
+              v-for="(it, i) in tagList"
+              :i="i"
+              :duration="1"
+              :delay="0.1"
+              direction="right"
               :key="it.id"
               @click="tagClick(it)"
               :class="{ active: currentTag?.name == it?.name }"
@@ -14,7 +18,7 @@
               <span class="label">#</span>
               <span class="title">{{ it?.name }}</span>
               <span class="num">{{ it.articles.length }}</span>
-            </div>
+            </EnterGroup>
           </aside>
           <ArticleList
             v-if="articleList"
@@ -36,15 +40,15 @@
 </template>
 
 <script lang="ts" setup>
-import { getAllTag, getArticleByTagId } from "~~/api";
+import { getAllTag, getArticleByTagId, getAllTag_hone } from "~~/api";
 import { Article, Tag } from "~~/types";
 import TagNav from "~~/components/home/tagNav.vue";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue";
 
 definePageMeta({
   keepalive: false,
 });
 
-const duration = 0.3
 const route = useRoute();
 const router = useRouter();
 const queryParams = reactive({
@@ -59,7 +63,7 @@ const tagList = ref<Tag[]>([]);
 const articleList = ref<Article[]>();
 const currentTag = ref<Tag>();
 
-useAsyncData(() => getAllTag("Article"))
+useAsyncData('allTag' ,() => getAllTag_hone())
   .then(({ data }) => {
     tagList.value = data.value;
     currentTag.value = tagList.value.find((it) => {
@@ -75,11 +79,13 @@ useAsyncData(() => getAllTag("Article"))
       );
       queryParams.total = totalCount;
       queryParams.pageNumber = Math.ceil(totalCount / queryParams.pageSize);
-      return nodes;
+      return { nodes, total: totalCount };
     });
   })
   .then(({ data }) => {
-    articleList.value = data.value;
+    articleList.value = data.value.nodes;
+    queryParams.total = data.value.total;
+    queryParams.pageNumber = Math.ceil(data.value.total / queryParams.pageSize);
   });
 
 const tagClick = async (tag: Tag) => {

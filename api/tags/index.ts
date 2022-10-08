@@ -185,6 +185,11 @@ export async function getAllTag_hone() {
         getAllTag {
           id
           name
+          weight
+          createTime
+          articles {
+            id
+          }
         }
       }
     `,

@@ -1,26 +1,30 @@
 <template>
   <div id="content-bar">
     <div class="content-bar-items" @wheel.prevent="handleWheel" ref="itemsRef">
-      <div
+      <EnterGroup
         class="content-bar-item"
         :class="{
           active: item.nameEn === activeMenu || item.name === activeMenu
         }"
-        v-for="item in items"
+        v-for="(item, i) in items"
+        :i="i"
+        :duration="1"
+        :delay="0.2"
+        direction="right"
         @click="emit('update:activeMenu', item.nameEn)"
       >
         <span>
           {{ item.name }}
         </span>
-      </div>
+      </EnterGroup>
     </div>
     <div class="content-bar-more" @click="emit('onMoreClick')">更多</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { RouteLocationRaw } from "vue-router";
 import { Type } from "~~/types";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue"
 
 const itemsRef = ref();
 const handleWheel = (event) => {

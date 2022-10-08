@@ -1,7 +1,12 @@
 <template>
   <div class="musicWidget-box" :class="{ hide: isHide }">
     <header class="music-header">
-      <i class="iconfont icon-gengduo" @click="isHide = !isHide"></i>
+      <i class="iconfont icon-change" @click="isHide = !isHide"></i>
+      <i
+        class="iconfont icon-yinleliebiao-"
+        @click="musicListHide = !musicListHide"
+        v-if="!isHide"
+      ></i>
     </header>
     <article class="music-content">
       <img
@@ -68,6 +73,38 @@
         </div>
       </i>
     </nav>
+    <nav class="music-list" :class="{ show: !musicListHide }">
+      <div class="musicList-meta">
+        <div>
+          <h3>个性歌单</h3>
+          <div class="total">
+            {{ wavesurfer.musicAddressList.value.length }}首歌曲
+          </div>
+        </div>
+        <i
+          class="close iconfont icon-guanbi"
+          @click="musicListHide = !musicListHide"
+        ></i>
+      </div>
+      <div class="musicListItem-box">
+        <div
+          v-for="(it, i) in wavesurfer.musicAddressList.value"
+          :i="i"
+          :duration="1"
+          :delay="0.1"
+          @click="musicItemClick(i)"
+        >
+          <article class="musicList-item">
+            <div class="flex flex-column justify-between">
+              <div>{{ it.title }}</div>
+              <div>{{ it.author }}</div>
+            </div>
+            <!-- <div>{{getTime(+it.createTime)}}</div> -->
+            <img class="musicList-item-img" :src="it.coverUrl" alt="" />
+          </article>
+        </div>
+      </div>
+    </nav>
   </div>
 </template>
 
@@ -75,9 +112,11 @@
 import { getMultimediaList } from "~~/api";
 import { secTotime } from "~~/utils/tools";
 import { MusicListItem, WaveSurferControll } from "~~/utils/WaveSurfer";
+import EnterGroup from "~~/components/PostItems/enterGroup.vue";
 
 type MusicMode = "sidebar";
 const isHide = ref(true);
+const musicListHide = ref(true);
 const waveform = ref();
 const precent = ref(50);
 const silentMode = ref(false);
@@ -161,6 +200,11 @@ const volumeClick = (e: Event) => {
     wavesurfer.toggleMute();
   }
 };
+
+const musicItemClick = (i: number) => {
+  wavesurfer.load(i);
+  musicListHide.value = true;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -178,6 +222,19 @@ const volumeClick = (e: Event) => {
   transition: width 0.3s, padding 0.3s, transform 0.3s;
   z-index: 999;
   animation: initalAnimation 2s alternate;
+  .iconfont {
+    transition: color 0.3s;
+    &:hover {
+      color: var(--theme);
+    }
+  }
+  .music-header {
+    display: flex;
+    justify-content: space-between;
+    .iconfont {
+      font-weight: 700;
+    }
+  }
 
   .music-content {
     overflow: hidden;
@@ -293,6 +350,73 @@ const volumeClick = (e: Event) => {
   }
 }
 
+.music-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: white;
+  transition: clip-path 1s;
+  clip-path: circle(0% at 100% 0%);
+  box-shadow: var(--card-shadow);
+  z-index: 99;
+  .musicList-meta {
+    position: sticky;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 1.5rem 0.5rem;
+    background-color: white;
+    h3 {
+      margin: 0 0 5px;
+      color: var(--theme);
+    }
+    .total {
+      font-size: 0.8rem;
+      color: var(--font-thin-deep-color);
+    }
+  }
+  &.show {
+    clip-path: circle(200% at 100% 0%);
+  }
+  .close {
+    font-weight: 700;
+    transition: transform 0.3s;
+    &:hover {
+      transform: rotate(360deg);
+    }
+  }
+  .musicListItem-box {
+    padding-top: 0.5rem;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .musicList-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    transition: box-shadow 0.3s, color 0.3s;
+    cursor: pointer;
+    &:hover {
+      box-shadow: var(--card-shadow);
+      color: var(--color-pink);
+    }
+  }
+  .musicList-item-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
 .musicWidget-box.hide {
   width: 3rem;
   padding: 1rem 0.7rem;
@@ -302,7 +426,7 @@ const volumeClick = (e: Event) => {
     transform: translateX(0);
   }
   .music-header {
-    text-align: center;
+    justify-content: center;
   }
   .music-content {
     .music-img {

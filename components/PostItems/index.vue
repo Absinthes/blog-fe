@@ -1,5 +1,5 @@
 <template>
-  <div class="post-items">
+  <div class="post-items" :style="{ 'grid-template-columns': `repeat(${size}, 1fr)` }">
     <EnterGroup
       v-for="(article,i) in data"
       :key="article.id"
