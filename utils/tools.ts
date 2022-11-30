@@ -116,7 +116,8 @@ export const getAvatar = (() => {
 
 export const secTotime = (s: number, len: number = 3) => {
   if (s < 0) return new Error("s < 0");
-  if(len < 2) return new Error('The length must be greater than or equal to 2')
+  if (len < 2)
+    return new Error("The length must be greater than or equal to 2");
   let hour = Math.floor(s / 3600);
   let min = Math.floor(s / 60) % 60;
   let sec = s % 60;
@@ -141,4 +142,9 @@ export const secTotime = (s: number, len: number = 3) => {
   }
   secStr += sec;
   return hourStr + minStr + secStr;
+};
+
+export const isElement = (e: unknown): e is Element => {
+  if (typeof Element === "undefined") return false;
+  return e instanceof Element;
 };

@@ -1,0 +1,5 @@
+import "./close.svg"
+import "./error.svg"
+import "./info.svg"
+import "./success.svg"
+import "./warning.svg"

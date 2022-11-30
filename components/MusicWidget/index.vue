@@ -100,7 +100,7 @@
               <div>{{ it.author }}</div>
             </div>
             <!-- <div>{{getTime(+it.createTime)}}</div> -->
-            <img class="musicList-item-img" :src="it.coverUrl" alt="" />
+            <img class="musicList-item-img" :src="it?.coverUrl" alt="" />
           </article>
         </div>
       </div>

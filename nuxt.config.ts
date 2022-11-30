@@ -9,11 +9,11 @@ export default defineNuxtConfig({
       link: [
         {
           rel: "stylesheet",
-          href: "//at.alicdn.com/t/c/font_3605429_te20lzh1yuq.css",
+          href: "//at.alicdn.com/t/c/font_3605429_dia5hk4g9p.css",
         },
         {
           rel: "stylesheet",
-          href: "https://font.sec.miui.com/font/css?family=MiSans:400,500,700:Chinese_Simplify,Latin&display=swap",
+          href: "//font.sec.miui.com/font/css?family=MiSans:400,500,700:Chinese_Simplify,Latin&display=swap",
         },
       ],
     },

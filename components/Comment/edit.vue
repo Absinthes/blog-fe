@@ -113,8 +113,10 @@ const handleConfirm = () => {
   commnet.content = editForm.value.content
   validate(commnet,{ skipMissingProperties: true }).then((errors) => {
     console.log(errors)
+    if(errors.length === 0){
+      emit("confirm", editForm.value,handleCancel);
+    }
   })
-  emit("confirm", editForm.value,handleCancel);
 };
 
 const unWatch = watch(
